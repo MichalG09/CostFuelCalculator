@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".activities.AddFuelActivity"
+    android:weightSum="100">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="@string/titleAddFuel"
+        android:textSize="25dp"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_weight="10"/>
+
+    <Spinner
+        android:id="@+id/insertTypeFuelSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:spinnerMode="dropdown"
+        android:tooltipText="@string/fuelType"/>
+
+    <EditText
+        android:id="@+id/insertDataFuel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:hint="Data"
+        android:focusableInTouchMode="false"
+        android:inputType="date"/>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10">
+
+        <EditText
+            android:id="@+id/insertCostFuel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/cost"
+            android:inputType="numberDecimal"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ZŁ"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10">
+
+        <EditText
+            android:id="@+id/insertQuantityFuel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/Quantity"
+            android:inputType="numberDecimal"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="L"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="18dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10">
+
+        <EditText
+            android:id="@+id/insertMileageFuel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/Distance"
+            android:inputType="number"
+            android:maxLength="7"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KM"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25">
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/saveFuel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="15"
+        android:text="@string/Save"
+        android:onClick="saveFuel"
+        android:background="@color/colorForButton"
+        android:textSize="20dp"
+        android:layout_margin="10dp"/>
+
+</LinearLayout>
