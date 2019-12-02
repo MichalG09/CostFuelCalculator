@@ -10,45 +10,43 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="@string/titleAddCar"
+        android:text="@string/titleEditCar"
         android:textSize="25dp"
         android:padding="5dp"
         android:gravity="center"
         android:layout_weight="10"/>
 
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/spinnerBranchCar"
+    <TextView
+        android:id="@+id/branchEditCar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textSize="20dp"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_weight="10"/>
+
+    <TextView
+        android:id="@+id/modelEditCar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textSize="20dp"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_weight="10"/>
+
+    <Spinner
+        android:id="@+id/spinnerTypeFuelCarEdit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textAlignment="center"
-        app:hintText="@string/markCar"
         android:layout_margin="7dp"
         android:layout_weight="10"/>
 
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/spinnerModelCar"
+    <Spinner
+        android:id="@+id/spinnerPeriodTimeEdit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textAlignment="center"
-        app:hintText="@string/modelCar"
-        android:layout_margin="7dp"
-        android:layout_weight="10"/>
-
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/spinnerTypeFuelCar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:textAlignment="center"
-        app:hintText="@string/fuelType"
-        android:layout_margin="7dp"
-        android:layout_weight="10"/>
-
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/spinnerPeriodTime"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:textAlignment="center"
-        app:hintText="@string/choose_period_time"
         android:layout_margin="7dp"
         android:layout_weight="10"/>
 
@@ -64,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:text="@string/Save"
-        android:onClick="onSaveNewCar"
+        android:onClick="onSaveEditCar"
         android:layout_weight="15"
         android:background="@color/colorForButton"
         android:textSize="20dp"

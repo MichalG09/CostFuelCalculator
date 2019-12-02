@@ -20,11 +20,20 @@
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:layout_height="0dp"
-        android:layout_weight="75"
+        android:layout_weight="65"
         android:gravity="center"
         xmlns:android="http://schemas.android.com/apk/res/android">
     </androidx.recyclerview.widget.RecyclerView>
 
+    <Button
+        android:text="Wyczyść baze"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:textSize="20dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorForButton"
+        android:onClick="clearDatabase"/>
     <Button
         android:text="@string/addCar"
         android:layout_width="match_parent"

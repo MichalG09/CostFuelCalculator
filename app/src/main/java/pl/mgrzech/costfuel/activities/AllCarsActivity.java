@@ -14,7 +14,9 @@ import java.util.List;
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.adapters.ListAllCarAdapter;
 import pl.mgrzech.costfuel.database.CarDatabase;
+import pl.mgrzech.costfuel.database.FuelDatabase;
 import pl.mgrzech.costfuel.models.Car;
+import pl.mgrzech.costfuel.models.Fuel;
 
 public class AllCarsActivity extends AppCompatActivity {
 
@@ -39,7 +41,9 @@ public class AllCarsActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         CarDatabase carDatabase = new CarDatabase(this);
+        FuelDatabase fuelDatabase = new FuelDatabase(this);
 
+//        fuelDatabase.calcFuelsDatabase();
         listCar = carDatabase.getAllCars();
 
         recyclerView.setAdapter(new ListAllCarAdapter(listCar, this));
@@ -55,4 +59,12 @@ public class AllCarsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void clearDatabase(View view) {
+        CarDatabase carDatabase = new CarDatabase(this);
+        carDatabase.clearDatabase();
+        FuelDatabase fuelDatabase = new FuelDatabase(this);
+        fuelDatabase.clearDatabase();
+        Intent intent = new Intent(this, AllCarsActivity.class);
+        startActivity(intent);
+    }
 }

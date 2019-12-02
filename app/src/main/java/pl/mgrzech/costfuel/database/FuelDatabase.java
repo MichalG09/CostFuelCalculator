@@ -8,14 +8,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import pl.mgrzech.costfuel.models.Fuel;
 
 public class FuelDatabase extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 30;
     private static final String DATABASE_NAME = "databaseCostFuel";
     private static final String TABLE_FUELS = "fuels";
     private static final String KEY_ID = "id";
@@ -32,10 +36,10 @@ public class FuelDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CARS_TABLE = "CREATE TABLE " + TABLE_FUELS + "(" +
+        String CREATE_CARS_TABLE = "CREATE TABLE " + TABLE_FUELS + " (" +
                 KEY_ID + " INTEGER PRIMARY KEY, " + KEY_FUEL_TYPE + " TEXT, " +
                 KEY_DATE + " TEXT, " + KEY_COST + " INTEGER, " +
-                KEY_QUANTITY + " INTEGER ," + KEY_MILEAGE + " INTEGER ," + KEY_CAR_ID + " TEXT" + ")";
+                KEY_QUANTITY + " INTEGER ," + KEY_MILEAGE + " INTEGER ," + KEY_CAR_ID + " TEXT " + ")";
         db.execSQL(CREATE_CARS_TABLE);
     }
 
@@ -81,9 +85,9 @@ public class FuelDatabase extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
 
-                Fuel fuel = new Fuel(Integer.parseInt(cursor.getString(0)), cursor.getString(1),
-                        cursor.getString(2), Double.parseDouble(cursor.getString(3)),
-                        Double.parseDouble(cursor.getString(4)), Integer.parseInt(cursor.getString(5)));
+        Fuel fuel = new Fuel(Integer.parseInt(cursor.getString(0)), cursor.getString(1),
+            cursor.getString(2), Double.parseDouble(cursor.getString(3)),
+            Double.parseDouble(cursor.getString(4)), Integer.parseInt(cursor.getString(5)));
         return fuel;
     }
 
@@ -98,25 +102,60 @@ public class FuelDatabase extends SQLiteOpenHelper {
 
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(TABLE_FUELS, new String[]{KEY_ID, KEY_FUEL_TYPE, KEY_DATE, KEY_COST, KEY_QUANTITY, KEY_MILEAGE}, KEY_CAR_ID + "=?",
-                new String[]{carId}, null, null, null, null);
+        try{
+            Cursor cursor = db.query(TABLE_FUELS, new String[]{KEY_ID, KEY_FUEL_TYPE, KEY_DATE, KEY_COST, KEY_QUANTITY, KEY_MILEAGE}, KEY_CAR_ID + "=?",
+                    new String[]{carId}, null, null, null, null);
 
-        if(cursor.moveToFirst()){
-            do{
-                Fuel fuel = new Fuel();
-                fuel.setId(Integer.parseInt(cursor.getString(0)));
-                fuel.setFuelType(cursor.getString(1));
-                fuel.setDate(cursor.getString(2));
-                fuel.setCost(Double.parseDouble(cursor.getString(3)));
-                fuel.setQuantity(Double.parseDouble(cursor.getString(4)));
-                fuel.setMileage(Integer.parseInt(cursor.getString(5)));
+            if(cursor.moveToFirst()){
+                do{
+                    Fuel fuel = new Fuel();
+                    fuel.setId(Integer.parseInt(cursor.getString(0)));
+                    fuel.setFuelType(cursor.getString(1));
+                    fuel.setDate(cursor.getString(2));
+                    fuel.setCost(Double.parseDouble(cursor.getString(3)));
+                    fuel.setQuantity(Double.parseDouble(cursor.getString(4)));
+                    fuel.setMileage(Integer.parseInt(cursor.getString(5)));
 
-                result.add(fuel);
+                    result.add(fuel);
 
-            }while (cursor.moveToNext());
+                }while (cursor.moveToNext());
+            }
+
+        }
+        catch (Exception e){
         }
 
         return result;
+    }
+
+    /**
+     * Methods return all fuels with correct data for calculation for one car.
+     * Metoda zwraca wszystkie tankowania z poprawną datą do przeliczeń dla danego samochodu.
+     * @param carId
+     * @return
+     */
+    public List<Fuel> getAllFuelsForCarIdInCalculationPeriod(String carId, int period) throws ParseException {
+        List<Fuel> listAllFuels = getAllFuelsForCarId(carId);
+        List<Fuel> result = new ArrayList<>();
+
+        if(period != 0){
+            Date now = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            Date fuelDate;
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MONTH, (period * -1));
+            Date start = cal.getTime();
+            for(Fuel fuel : listAllFuels){
+                fuelDate = simpleDateFormat.parse(fuel.getDate());
+                if(fuelDate.before(now) && fuelDate.after(start)){
+                    result.add(fuel);
+                }
+            }
+        }
+        else{
+            return listAllFuels;
+        }
+        return  result;
     }
 
     /**
@@ -252,5 +291,42 @@ public class FuelDatabase extends SQLiteOpenHelper {
                 cursor.getString(2), Double.parseDouble(cursor.getString(3)),
                 Double.parseDouble(cursor.getString(4)), Integer.parseInt(cursor.getString(5)));
         return fuel;
+    }
+
+    /**
+     * Methods return a number fuels for car
+     * Metoda zwraca ilość tankowań dla samochodu
+     * @param carId
+     * @return
+     */
+    public int calcFuelsForCarInDatabase(int carId){
+        int result = 0;
+        String sql = "SELECT count(*) FROM " + TABLE_FUELS + " WHERE " + KEY_CAR_ID + "= ?";
+        Cursor cursor = getReadableDatabase().rawQuery(sql, new String[] {String.valueOf(carId)});
+
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            result = cursor.getInt(0);
+        }
+
+        return result;
+    }
+
+    /**
+     * Methods return a number fuels in datebase
+     * Metoda zwraca ilość tankowań w bazie danych
+     * @return
+     */
+    public int calcFuelsDatabase(){
+        int result = 0;
+        String sql = "SELECT count(*) FROM " + TABLE_FUELS;
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            result = cursor.getInt(0);
+        }
+
+        return result;
     }
 }

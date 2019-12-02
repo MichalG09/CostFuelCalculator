@@ -1,5 +1,6 @@
 package pl.mgrzech.costfuel.calculate;
 
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CalculateAvarageFuelAndCost {
     public static Car recarkulate(FuelDatabase fuelDatabase, Car car) {
 
         if (car.getFuelType().contains("+")){
-            return calcForTwoTypeFUel(car, fuelDatabase);
+            return calcForTwoTypeFuel(car, fuelDatabase);
         }
         else {
             return calcForOneTypeFuel(car, fuelDatabase);
@@ -33,32 +34,39 @@ public class CalculateAvarageFuelAndCost {
      * @param fuelDatabase
      * @return
      */
-    private static Car calcForTwoTypeFUel(Car car, FuelDatabase fuelDatabase) {
+    private static Car calcForTwoTypeFuel(Car car, FuelDatabase fuelDatabase) {
         double sumCostFuels = 0;
         double sumQuantityFuels = 0;
-        double averageCost = 0;
-        double averageFuelConsumption = 0;
+        double avarageCost = 0;
+        double avarageFuelConsumption = 0;
         int minMileageFirstTypeFuel = 0;
         int maxMileageFirstTypeFuel = 0;
         int maxMileageSecondTypeFuel = 0;
         int minMileageSecondTypeFuel = 0;
         double sumCostSecondTypeFuel = 0;
         double sumQuantitySecondTypeFuel = 0;
-        double averageCostSecondTypeFuel = 0;
-        double averageFuelConsumptionSecondTypeFuel = 0;
+        double avarageCostSecondTypeFuel = 0;
+        double avarageFuelConsumptionSecondTypeFuel = 0;
         String[] typesFuel = car.getFuelType().split("\\+");
         String typeFirstFuel = typesFuel[0].trim();
         String typeSecondFuel = typesFuel[1].trim();
         boolean canCalcForFirstFuel = fuelDatabase.calcNumberFuelsForTypeFuel(car.getId(), typeFirstFuel) > 1;
         boolean canCalcForSecondFuel = fuelDatabase.calcNumberFuelsForTypeFuel(car.getId(), typeSecondFuel) > 1;
-        List<Fuel> listFuels = fuelDatabase.getAllFuelsForCarId(String.valueOf(car.getId()));
+        List<Fuel> listFuels = null;
+        try {
+            listFuels = fuelDatabase.getAllFuelsForCarIdInCalculationPeriod(String.valueOf(car.getId()), car.convertPeriodTimeToInt());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         Collections.sort(listFuels, Fuel.Comparators.SORT_BY_DATE);
         Fuel firstFuelFirstTypeForCar = null;
         Fuel firstFuelSecondTypeForCar = null;
 
         if(!canCalcForFirstFuel && !canCalcForSecondFuel){
-            car.setAvarageFuelConsumption(0);
-            car.setAvarageCost(0);
+            car.setAverageConsumptionFirstFuel(0);
+            car.setAverageConsumptionSecondFuel(0);
+            car.setAverageCostFirstFuel(0);
+            car.setAverageCostSecondFuel(0);
         }
         else {
             for (Fuel fuel : listFuels) {
@@ -93,27 +101,31 @@ public class CalculateAvarageFuelAndCost {
             int deltaMileageSecondTypeFuel = maxMileageSecondTypeFuel - minMileageSecondTypeFuel;
 
             if (deltaMileageFirstTypeFuel <= 0 && deltaMileageSecondTypeFuel <= 0) {
-                car.setAvarageFuelConsumption(-1);
-                car.setAvarageCost(-1);
+                car.setAverageConsumptionFirstFuel(-1);
+                car.setAverageConsumptionSecondFuel(-1);
+                car.setAverageCostFirstFuel(-1);
+                car.setAverageCostSecondFuel(-1);
                 return car;
             }
             else if (deltaMileageFirstTypeFuel > 0 && deltaMileageSecondTypeFuel <= 0) {
-                averageCost = (sumCostFuels - firstFuelFirstTypeForCar.getCost()) / deltaMileageFirstTypeFuel;
-                averageFuelConsumption = (sumQuantityFuels - firstFuelFirstTypeForCar.getQuantity()) / deltaMileageFirstTypeFuel;
+                avarageCost = (sumCostFuels - firstFuelFirstTypeForCar.getCost()) / deltaMileageFirstTypeFuel;
+                avarageFuelConsumption = (sumQuantityFuels - firstFuelFirstTypeForCar.getQuantity()) / deltaMileageFirstTypeFuel;
             }
             else if (deltaMileageFirstTypeFuel <= 0 && deltaMileageSecondTypeFuel > 0) {
-                averageCostSecondTypeFuel = (sumCostSecondTypeFuel - firstFuelSecondTypeForCar.getCost()) / deltaMileageSecondTypeFuel;
-                averageFuelConsumptionSecondTypeFuel = (sumQuantitySecondTypeFuel - firstFuelSecondTypeForCar.getQuantity()) / deltaMileageSecondTypeFuel;
+                avarageCostSecondTypeFuel = (sumCostSecondTypeFuel - firstFuelSecondTypeForCar.getCost()) / deltaMileageSecondTypeFuel;
+                avarageFuelConsumptionSecondTypeFuel = (sumQuantitySecondTypeFuel - firstFuelSecondTypeForCar.getQuantity()) / deltaMileageSecondTypeFuel;
             }
             else {
-                averageCost = (sumCostFuels - firstFuelFirstTypeForCar.getCost()) / deltaMileageFirstTypeFuel;
-                averageFuelConsumption = (sumQuantityFuels - firstFuelFirstTypeForCar.getQuantity()) / deltaMileageFirstTypeFuel;
-                averageCostSecondTypeFuel = (sumCostSecondTypeFuel - firstFuelSecondTypeForCar.getCost()) / deltaMileageSecondTypeFuel;
-                averageFuelConsumptionSecondTypeFuel = (sumQuantitySecondTypeFuel - firstFuelSecondTypeForCar.getQuantity()) / deltaMileageSecondTypeFuel;
+                avarageCost = (sumCostFuels - firstFuelFirstTypeForCar.getCost()) / deltaMileageFirstTypeFuel;
+                avarageFuelConsumption = (sumQuantityFuels - firstFuelFirstTypeForCar.getQuantity()) / deltaMileageFirstTypeFuel;
+                avarageCostSecondTypeFuel = (sumCostSecondTypeFuel - firstFuelSecondTypeForCar.getCost()) / deltaMileageSecondTypeFuel;
+                avarageFuelConsumptionSecondTypeFuel = (sumQuantitySecondTypeFuel - firstFuelSecondTypeForCar.getQuantity()) / deltaMileageSecondTypeFuel;
             }
 
-            car.setAvarageFuelConsumption((averageFuelConsumption + averageFuelConsumptionSecondTypeFuel) * 100);
-            car.setAvarageCost((averageCost + averageCostSecondTypeFuel) * 100);
+            car.setAverageConsumptionFirstFuel(avarageFuelConsumption * 100);
+            car.setAverageCostFirstFuel(avarageCost * 100);
+            car.setAverageConsumptionSecondFuel(avarageFuelConsumptionSecondTypeFuel * 100);
+            car.setAverageCostSecondFuel(avarageCostSecondTypeFuel * 100);
         }
 
         return car;
@@ -129,8 +141,8 @@ public class CalculateAvarageFuelAndCost {
 
         double sumCostFuels = 0;
         double sumQuantityFuels = 0;
-        double averageCost = 0;
-        double averageFuelConsumption = 0;
+        double avarageCost = 0;
+        double avarageFuelConsumption = 0;
         int minMileageFirstTypeFuel = 0;
         int maxMileageFirstTypeFuel = 0;
         int maxMileageSecondTypeFuel = 0;
@@ -140,40 +152,49 @@ public class CalculateAvarageFuelAndCost {
         double averageCostSecondTypeFuel = 0;
         double averageFuelConsumptionSecondTypeFuel = 0;
         Fuel firstFuelForCar = null;
-        List<Fuel> listFuels = fuelDatabase.getAllFuelsForCarId(String.valueOf(car.getId()));
+        List<Fuel> listFuels = null;
+        try {
+            listFuels = fuelDatabase.getAllFuelsForCarIdInCalculationPeriod(String.valueOf(car.getId()), car.convertPeriodTimeToInt());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         Collections.sort(listFuels, Fuel.Comparators.SORT_BY_DATE);
 
-        if(fuelDatabase.calcNumberFuelsForTypeFuel(car.getId(), car.getFuelType()) > 1){
-            for (Fuel fuel : listFuels) {
-                if(minMileageFirstTypeFuel == 0 || minMileageFirstTypeFuel > fuel.getMileage()){
-                    minMileageFirstTypeFuel = fuel.getMileage();
-                    firstFuelForCar = fuel;
+        if(!listFuels.isEmpty()){
+            if(fuelDatabase.calcNumberFuelsForTypeFuel(car.getId(), car.getFuelType()) > 1){
+                for (Fuel fuel : listFuels) {
+                    if(minMileageFirstTypeFuel == 0 || minMileageFirstTypeFuel > fuel.getMileage()){
+                        minMileageFirstTypeFuel = fuel.getMileage();
+                        firstFuelForCar = fuel;
+                    }
+                    if (maxMileageFirstTypeFuel < fuel.getMileage()) {
+                        maxMileageFirstTypeFuel = fuel.getMileage();
+                    }
+
+                    sumCostFuels += fuel.getCost();
+                    sumQuantityFuels += fuel.getQuantity();
+
                 }
-                if (maxMileageFirstTypeFuel < fuel.getMileage()) {
-                    maxMileageFirstTypeFuel = fuel.getMileage();
+
+                if ((maxMileageFirstTypeFuel - minMileageFirstTypeFuel) > 0) {
+                    avarageCost = ((sumCostFuels - firstFuelForCar.getCost()) / (maxMileageFirstTypeFuel - minMileageFirstTypeFuel)) * 100;
+                    avarageFuelConsumption = ((sumQuantityFuels - firstFuelForCar.getQuantity()) / (maxMileageFirstTypeFuel - minMileageFirstTypeFuel)) * 100;
                 }
-
-                sumCostFuels += fuel.getCost();
-                sumQuantityFuels += fuel.getQuantity();
-
+                else {
+                    avarageCost = -1;
+                    avarageFuelConsumption = -1;
+                }
             }
-
-            if ((maxMileageFirstTypeFuel - minMileageFirstTypeFuel) > 0) {
-                averageCost = ((sumCostFuels - firstFuelForCar.getCost()) / (maxMileageFirstTypeFuel - minMileageFirstTypeFuel)) * 100;
-                averageFuelConsumption = ((sumQuantityFuels - firstFuelForCar.getQuantity()) / (maxMileageFirstTypeFuel - minMileageFirstTypeFuel)) * 100;
-            }
-            else {
-                averageCost = -1;
-                averageFuelConsumption = -1;
+            else{
+                avarageCost = 0;
+                avarageFuelConsumption = 0;
             }
         }
-        else{
-            averageCost = 0;
-            averageFuelConsumption = 0;
-        }
 
-        car.setAvarageFuelConsumption(averageFuelConsumption);
-        car.setAvarageCost(averageCost);
+        car.setAverageConsumptionFirstFuel(avarageFuelConsumption);
+        car.setAverageCostFirstFuel(avarageCost);
+        car.setAverageConsumptionSecondFuel(0);
+        car.setAverageCostSecondFuel(0);
 
         return car;
     }

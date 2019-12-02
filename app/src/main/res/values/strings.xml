@@ -16,6 +16,16 @@
     <string name="Distance">Przebieg</string>
     <string name="titleAddCar">DODAJ SAMOCHÓD</string>
     <string name="titleAddFuel">DODAJ TANKOWANIE</string>
+    <string name="titleEditCar">EDYTUJ SAMOCHÓD</string>
+
+    <string-array name="period_time">
+        <item>Okres wyliczania kosztów</item>
+        <item>Brak ograniczeń</item>
+        <item>1 miesiąc</item>
+        <item>3 miesiące</item>
+        <item>6 miesięcy</item>
+        <item>12 miesięcy</item>
+    </string-array>
 
     <string-array name="brands_cars">
         <item>Alfa Romeo</item>
@@ -55,7 +65,7 @@
     </string-array>
 
     <string-array name="alfa_romeo_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>145</item>
         <item>147</item>
         <item>155</item>
@@ -83,7 +93,7 @@
     </string-array>
 
     <string-array name="audi_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>100</item>
         <item>200</item>
         <item>80</item>
@@ -120,7 +130,7 @@
     </string-array>
 
     <string-array name="bmw_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>1M</item>
         <item>3GT</item>
         <item>5GT</item>
@@ -149,7 +159,7 @@
     </string-array>
 
     <string-array name="chevrolet_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Alero</item>
         <item>Aveo</item>
         <item>Berette</item>
@@ -178,7 +188,7 @@
     </string-array>
 
     <string-array name="chrysler_mocdels">
-        <item></item>
+        <item>Model samochodu</item>
         <item>300</item>
         <item>Crossfire</item>
         <item>Daytona</item>
@@ -199,7 +209,7 @@
     </string-array>
 
     <string-array name="citroen_mocdels">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Berlingo</item>
         <item>C-Crosser</item>
         <item>C-Elysee</item>
@@ -224,7 +234,7 @@
     </string-array>
 
     <string-array name="dacia_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Dokker</item>
         <item>Duster</item>
         <item>Lodgy</item>
@@ -233,7 +243,7 @@
     </string-array>
 
     <string-array name="daewoo_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Espero</item>
         <item>Evanda</item>
         <item>Kalos</item>
@@ -248,7 +258,7 @@
     </string-array>
 
     <string-array name="dodge_mocels">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Avenger</item>
         <item>Caliber</item>
         <item>Challenger</item>
@@ -262,7 +272,7 @@
     </string-array>
 
     <string-array name="fiat_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>124</item>
         <item>125</item>
         <item>126</item>
@@ -298,7 +308,7 @@
     </string-array>
 
     <string-array name="ford_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>B-MAX</item>
         <item>C-MAX</item>
         <item>Cougar</item>
@@ -337,7 +347,7 @@
     </string-array>
 
     <string-array name="honda_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Accord</item>
         <item>Aerodeck</item>
         <item>City</item>
@@ -361,7 +371,7 @@
     </string-array>
 
     <string-array name="hyundai_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Accent</item>
         <item>Atos</item>
         <item>Coupe</item>
@@ -393,7 +403,7 @@
     </string-array>
 
     <string-array name="jeep_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Cherokee</item>
         <item>Commander</item>
         <item>Compass</item>
@@ -404,7 +414,7 @@
     </string-array>
 
     <string-array name="kia_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Carens</item>
         <item>Carnival</item>
         <item>Ceed</item>
@@ -423,7 +433,7 @@
     </string-array>
 
     <string-array name="land_rover_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Defender</item>
         <item>Discovery</item>
         <item>Freelander</item>
@@ -431,7 +441,7 @@
     </string-array>
 
     <string-array name="mazda_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>2</item>
         <item>3</item>
         <item>323</item>
@@ -455,7 +465,7 @@
     </string-array>
 
     <string-array name="mercedes_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>AMG-GT</item>
         <item>Citan</item>
         <item>CL</item>
@@ -492,7 +502,7 @@
     </string-array>
 
     <string-array name="mini_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Cooper</item>
         <item>Cabrio</item>
         <item>Clubman</item>
@@ -505,7 +515,7 @@
     </string-array>
 
     <string-array name="mitsubishi_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>3000 GT</item>
         <item>ASX</item>
         <item>Carisma</item>
@@ -524,7 +534,7 @@
     </string-array>
 
     <string-array name="nissan_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>100 NX</item>
         <item>200 SX</item>
         <item>300 ZX</item>
@@ -559,7 +569,7 @@
     </string-array>
 
     <string-array name="opel_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Adam</item>
         <item>Agilla</item>
         <item>Ampera</item>
@@ -598,7 +608,7 @@
     </string-array>
 
     <string-array name="peugeot_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>1007</item>
         <item>106</item>
         <item>107</item>
@@ -628,7 +638,7 @@
     </string-array>
 
     <string-array name="renault_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Captur</item>
         <item>Clio</item>
         <item>Espace</item>
@@ -655,7 +665,7 @@
     </string-array>
 
     <string-array name="rover_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>100</item>
         <item>200</item>
         <item>25</item>
@@ -673,7 +683,7 @@
     </string-array>
 
     <string-array name="saab_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>9-3</item>
         <item>9-4</item>
         <item>9-5</item>
@@ -684,7 +694,7 @@
     </string-array>
 
     <string-array name="seat_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Alhambra</item>
         <item>Altea</item>
         <item>Arosa</item>
@@ -702,7 +712,7 @@
     </string-array>
 
     <string-array name="skoda_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Citigo</item>
         <item>Fabia</item>
         <item>Favorit</item>
@@ -726,7 +736,7 @@
     </string-array>
 
     <string-array name="subaru_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>B9</item>
         <item>Forester</item>
         <item>G3X</item>
@@ -743,7 +753,7 @@
     </string-array>
 
     <string-array name="suzuki_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Alto</item>
         <item>Baleno</item>
         <item>Celerio</item>
@@ -764,7 +774,7 @@
     </string-array>
 
     <string-array name="toyota_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>4Runner</item>
         <item>Auris</item>
         <item>Avensis</item>
@@ -796,7 +806,7 @@
     </string-array>
 
     <string-array name="volkswagen_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>Amarok</item>
         <item>Beetle</item>
         <item>Bora</item>
@@ -826,7 +836,7 @@
     </string-array>
 
     <string-array name="volvo_models">
-        <item></item>
+        <item>Model samochodu</item>
         <item>C30</item>
         <item>C70</item>
         <item>S40</item>
@@ -845,7 +855,7 @@
     </string-array>
 
     <string-array name="types_fuel">
-        <item></item>
+        <item>Rodzaj paliwa</item>
         <item>PB</item>
         <item>ON</item>
         <item>PB + LPG</item>
@@ -869,4 +879,7 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="choose_period_time">Okres wyliczania kosztów</string>
+    <string name="model_car_for_validate">Model samochodu</string>
+    <string name="fuel_type_for_validate">Rodzaj paliwa</string>
 </resources>

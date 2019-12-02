@@ -20,9 +20,12 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     private String brandAddingCar = "";
     private String modelsAddingCar = "";
     private String typeFuelAddingCar = "";
+    private String periodTimeAddingCar = "";
     private Spinner spinnerBranchCar;
     private Spinner spinnerModelCar;
     private Spinner spinnerTypeFuel;
+    private Spinner spinnerPeriodTIme;
+    private ArrayAdapter<CharSequence> adapter;
 
     /**
      * car datebase
@@ -38,12 +41,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_car);
 
-        spinnerBranchCar = (Spinner) findViewById(R.id.spinnerBranchCar);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.brands_cars, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerBranchCar.setAdapter(adapter);
-        spinnerBranchCar.setOnItemSelectedListener(this);
+        createSpinnerBranchCar();
     }
 
     /**
@@ -58,36 +56,61 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         if(parent.toString().contains("spinnerBranchCar")){
-
             brandAddingCar = parent.getItemAtPosition(position).toString();
-
-            spinnerModelCar = (Spinner) findViewById(R.id.spinnerModelCar);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                    getListModelCarForBrand(brandAddingCar), android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerModelCar.setAdapter(adapter);
-            spinnerModelCar.setOnItemSelectedListener(this);
-            modelsAddingCar = "";
-            typeFuelAddingCar = "";
-
-            Toast.makeText(parent.getContext(), "Wybierz model samochodu", Toast.LENGTH_LONG).show();
-
+            createSpinnerModelCar(parent);
         }
         else if (parent.toString().contains("spinnerModelCar")){
             modelsAddingCar = parent.getItemAtPosition(position).toString();
-            Toast.makeText(parent.getContext(), "Wybierz typ paliwa samochodu", Toast.LENGTH_LONG).show();
-
-            spinnerTypeFuel = (Spinner) findViewById(R.id.spinnerTypeFuelCar);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                    R.array.types_fuel, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerTypeFuel.setAdapter(adapter);
-            spinnerTypeFuel.setOnItemSelectedListener(this);
-            typeFuelAddingCar = "";
+            if(typeFuelAddingCar.isEmpty()){
+                createSpinnerTypeFuel(parent);
+            }
         }
         else if (parent.toString().contains("spinnerTypeFuelCar")){
             typeFuelAddingCar = parent.getItemAtPosition(position).toString();
+            if(periodTimeAddingCar.isEmpty()){
+                createSpinnerPeriodTime(parent);
+            }
         }
+        else if (parent.toString().contains("spinnerPeriodTime")){
+            periodTimeAddingCar = parent.getItemAtPosition(position).toString();
+        }
+    }
+
+    private void createSpinnerBranchCar() {
+        spinnerBranchCar = (Spinner) findViewById(R.id.spinnerBranchCar);
+        createSpinner(spinnerBranchCar, R.array.brands_cars);
+    }
+
+    private void createSpinnerModelCar(AdapterView<?> parent) {
+        Toast.makeText(parent.getContext(), "Wybierz model samochodu", Toast.LENGTH_SHORT).show();
+
+        spinnerModelCar = (Spinner) findViewById(R.id.spinnerModelCar);
+        createSpinner(spinnerModelCar, getListModelCarForBrand(brandAddingCar));
+        modelsAddingCar = "";
+    }
+
+    private void createSpinnerTypeFuel(AdapterView<?> parent) {
+        Toast.makeText(parent.getContext(), "Wybierz typ paliwa samochodu", Toast.LENGTH_SHORT).show();
+
+        spinnerTypeFuel = (Spinner) findViewById(R.id.spinnerTypeFuelCar);
+        createSpinner(spinnerTypeFuel, R.array.types_fuel);
+        typeFuelAddingCar = "";
+    }
+
+    private void createSpinnerPeriodTime(AdapterView<?> parent) {
+        Toast.makeText(parent.getContext(), "Wybierz okres przeliczania kosztów", Toast.LENGTH_SHORT).show();
+
+        spinnerPeriodTIme = (Spinner) findViewById(R.id.spinnerPeriodTime);
+        createSpinner(spinnerPeriodTIme, R.array.period_time);
+        periodTimeAddingCar = "";
+    }
+
+    private void createSpinner(Spinner spinner, int textArray){
+        adapter = ArrayAdapter.createFromResource(this,
+                textArray, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -103,19 +126,25 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         String textErrorValidation = "";
         boolean correctValidation = true;
         if(brandAddingCar.isEmpty()){
-            textErrorValidation = textErrorValidation + "Marka samochodu nie może być pusta ! \n";
+            textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzona marka samochodu ! \n";
             correctValidation = false;
         }
-        if(modelsAddingCar.isEmpty()){
-            textErrorValidation = textErrorValidation + "Model samochodu nie może być pusty ! \n";
+        if(modelsAddingCar.isEmpty() || modelsAddingCar.equals(getString(R.string.model_car_for_validate))){
+            textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony model samochodu ! \n";
             correctValidation = false;
         }
-        if (typeFuelAddingCar.isEmpty()){
-            textErrorValidation = textErrorValidation + "Rodzaj paliwa nie może być pusty !";
+        if (typeFuelAddingCar.isEmpty() || typeFuelAddingCar.equals(getString(R.string.fuel_type_for_validate))){
+            textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony rodzaj paliwa ! \n";
             correctValidation = false;
         }
+        int choose_period_time = R.string.choose_period_time;
+        if (periodTimeAddingCar.isEmpty() || periodTimeAddingCar.equals(getString(R.string.choose_period_time))){
+            textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony okres wyliczania kosztów ! \n";
+            correctValidation = false;
+        }
+
         if(correctValidation) {
-            carDatabase.addCar(new Car(brandAddingCar, modelsAddingCar, typeFuelAddingCar));
+            carDatabase.addCar(new Car(brandAddingCar, modelsAddingCar, typeFuelAddingCar, periodTimeAddingCar));
             Toast.makeText(this, "Poprawnie zapisano nowy samochód !", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, AllCarsActivity.class);
             startActivity(intent);

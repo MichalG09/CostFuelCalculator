@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.mgrzech.costfuel"
-    android:versionName="1.0">
+    android:versionName="1.1">
 
     <application
         android:allowBackup="true"
@@ -30,6 +30,9 @@
             android:label="KALKULATOR SPALANIA"></activity>
         <activity
             android:name=".activities.AllFuelsActivity"
+            android:label="KALKULATOR SPALANIA" />
+        <activity
+            android:name=".activities.EditCarActivity"
             android:label="KALKULATOR SPALANIA" />
     </application>
 

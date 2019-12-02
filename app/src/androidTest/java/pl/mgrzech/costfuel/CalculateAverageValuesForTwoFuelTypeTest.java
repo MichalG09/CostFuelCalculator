@@ -13,6 +13,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
 import pl.mgrzech.costfuel.database.CarDatabase;
@@ -35,6 +39,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
     static FuelDatabase fuelDatabase;
     static Fuel fuel;
     private DecimalFormat decimalFormat = new DecimalFormat("##0.00");
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private Date now = new Date();
 
     /**
      * Methods prepare all necesary variables.
@@ -44,7 +50,7 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         mContext = ApplicationProvider.getApplicationContext();
         carDatabase = new CarDatabase(mContext);
         fuelDatabase = new FuelDatabase(mContext);
-        testingCar = new Car("TestTwoType", "Test", "PB + LPG");
+        testingCar = new Car("TestTwoType", "Test", "PB + LPG", "Brak ograniczeń");
         carDatabase.addCar(testingCar);
     }
 
@@ -55,7 +61,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
     public void aCheckAverageValuesAfterCreateAndSaveNewCar(){
         testingCar = carDatabase.getCarByName(testingCar.getMark());
         fuelDatabase.deleteFuelsForCar(testingCar.getId());
-        assertEquals(true, testingCar.getAvarageCost() == 0 && testingCar.getAvarageFuelConsumption() == 0);
+        assertEquals(true, testingCar.getAverageCostFirstFuel() == 0 && testingCar.getAverageCostFirstFuel() == 0
+            && testingCar.getAverageConsumptionSecondFuel() == 0 && testingCar.getAverageCostSecondFuel() == 0);
     }
 
     /**
@@ -70,7 +77,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
         testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
         carDatabase.updateCar(testingCar);
-        assertEquals(true, testingCar.getAvarageCost() == 0 && testingCar.getAvarageFuelConsumption() == 0);
+        assertEquals(true, testingCar.getAverageCostFirstFuel() == 0 && testingCar.getAverageCostFirstFuel() == 0
+                && testingCar.getAverageConsumptionSecondFuel() == 0 && testingCar.getAverageCostSecondFuel() == 0);
     }
 
     /**
@@ -83,7 +91,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
         testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
         carDatabase.updateCar(testingCar);
-        assertEquals(true, testingCar.getAvarageCost() == 50 && testingCar.getAvarageFuelConsumption() == 10);
+        assertEquals(true, testingCar.getAverageConsumptionFirstFuel() == 10 && testingCar.getAverageCostFirstFuel() == 50
+                && testingCar.getAverageConsumptionSecondFuel() == 0 && testingCar.getAverageCostSecondFuel() == 0);
     }
 
     /**
@@ -95,7 +104,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
         testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
         carDatabase.updateCar(testingCar);
-        assertEquals(true, testingCar.getAvarageCost() == 62 && testingCar.getAvarageFuelConsumption() == 16);
+        assertEquals(true, testingCar.getAverageConsumptionFirstFuel() == 10 && testingCar.getAverageCostFirstFuel() == 50
+                && testingCar.getAverageConsumptionSecondFuel() == 6 && testingCar.getAverageCostSecondFuel() == 12);
     }
 
     /**
@@ -108,7 +118,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         fuelDatabase.deleteFuel(fuel);
         testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
         carDatabase.updateCar(testingCar);
-        assertEquals(true, testingCar.getAvarageCost() == 12 && testingCar.getAvarageFuelConsumption() == 6);
+        assertEquals(true, testingCar.getAverageConsumptionFirstFuel() == 0 && testingCar.getAverageCostFirstFuel() == 0
+                && testingCar.getAverageConsumptionSecondFuel() == 6 && testingCar.getAverageCostSecondFuel() == 12);
     }
 
     /**
@@ -121,7 +132,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         fuelDatabase.deleteFuel(fuel);
         testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
         carDatabase.updateCar(testingCar);
-        assertEquals(true, testingCar.getAvarageCost() == 0 && testingCar.getAvarageFuelConsumption() == 0);
+        assertEquals(true, testingCar.getAverageConsumptionFirstFuel() == 0 && testingCar.getAverageCostFirstFuel() == 0
+                && testingCar.getAverageConsumptionSecondFuel() == 0 && testingCar.getAverageCostSecondFuel() == 0);
     }
 
     /**
@@ -139,7 +151,10 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
         testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
         carDatabase.updateCar(testingCar);
-        assertEquals(true, decimalFormat.format(testingCar.getAvarageCost()).equals("74.44") && testingCar.getAvarageFuelConsumption() == 17);
+        assertEquals(true, decimalFormat.format(testingCar.getAverageCostFirstFuel()).equals("58.33")
+                && decimalFormat.format(testingCar.getAverageConsumptionFirstFuel()).equals("9.44")
+                && decimalFormat.format(testingCar.getAverageConsumptionSecondFuel()).equals("7.56")
+                && decimalFormat.format(testingCar.getAverageCostSecondFuel()).equals("16.11"));
     }
 
     /**
@@ -159,7 +174,10 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
         testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
         carDatabase.updateCar(testingCar);
-        assertEquals(true, testingCar.getAvarageCost() == 75 && testingCar.getAvarageFuelConsumption() == 9);
+        assertEquals(true, decimalFormat.format(testingCar.getAverageCostFirstFuel()).equals("75.00")
+                && decimalFormat.format(testingCar.getAverageConsumptionFirstFuel()).equals("9.00")
+                && decimalFormat.format(testingCar.getAverageConsumptionSecondFuel()).equals("0.00")
+                && decimalFormat.format(testingCar.getAverageCostSecondFuel()).equals("0.00"));
     }
 
     /**
@@ -179,7 +197,48 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
         testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
         carDatabase.updateCar(testingCar);
-        assertEquals(true, testingCar.getAvarageCost() == -1 && testingCar.getAvarageFuelConsumption() == -1);
+        assertEquals(true, testingCar.getAverageConsumptionFirstFuel() == -1 && testingCar.getAverageCostFirstFuel() == -1
+                && testingCar.getAverageConsumptionSecondFuel() == -1 && testingCar.getAverageCostSecondFuel() == -1);
+    }
+
+    @Test
+    public void jCheckAverageValuesAfterChangePeriodTime(){
+        fuelDatabase.deleteFuelsForCar(testingCar.getId());
+        testingCar.setPeriodTimeForCalculation("1 miesiąc");
+        carDatabase.updateCar(testingCar);
+        fuel = new Fuel(getEarlierDate(now, 0, 0), "PB", 275.0, 35.0, 300 );
+        fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel(getEarlierDate(now, 0, 1), "PB", 375.0, 45.0, 200 );
+        fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel(getEarlierDate(now, 1, 2), "PB", 475.0, 55.0, 100 );
+        fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel(getEarlierDate(now, 1, 2), "PB", 95.0, 15.0, 5 );
+        fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel(getEarlierDate(now, 0, 0), "LPG", 80, 35.0, 1000 );
+        fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel(getEarlierDate(now, 0, 1), "LPG", 90, 45.0, 900 );
+        fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel(getEarlierDate(now, 1, 2), "LPG", 70, 55.0, 800 );
+        fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel(getEarlierDate(now, 3, 3), "LPG", 100, 15.0, 600 );
+        fuelDatabase.addFuel(fuel, String.valueOf(testingCar.getId()));
+        testingCar = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, testingCar);
+        carDatabase.updateCar(testingCar);
+        assertEquals(true, testingCar.getAverageConsumptionFirstFuel() == 35 && testingCar.getAverageCostFirstFuel() == 275
+                && testingCar.getAverageConsumptionSecondFuel() == 35 && testingCar.getAverageCostSecondFuel() == 80);
+    }
+
+    private String getEarlierDate(Date date, int month, int days) {
+
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        if(month != 0){
+            cal.add(Calendar.MONTH, (month * -1));
+        }
+        if(days != 0){
+            cal.add(Calendar.DAY_OF_MONTH, (days * -1));
+        }
+        return simpleDateFormat.format(cal.getTime());
     }
 
     /**

@@ -43,7 +43,7 @@ public class CarActivity extends AppCompatActivity {
         getIncomingIntent();
         mContext = this;
 
-        carDatabase = new CarDatabase(this);
+        carDatabase = new CarDatabase(mContext);
         car = carDatabase.getCarById(carIdForShow);
 
         carMarkInfo = findViewById(R.id.carActivityCarMark);
@@ -56,26 +56,72 @@ public class CarActivity extends AppCompatActivity {
         carTypeFuelInfo.setText(car.getFuelType());
 
         carAverageFuelInfo = findViewById(R.id.carActivityCarAverageFuel);
-        if(car.getAvarageFuelConsumption() == 0){
-            carAverageFuelInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
-            carAverageFuelInfo.setText("Brak Danych");
+        carAverageFuelCostInfo = findViewById(R.id.carActivityCarAverageCostFuel);
+
+        if(car.getFuelType().contains("+")){
+            if(car.getAverageConsumptionFirstFuel() > 0 && car.getAverageConsumptionSecondFuel() > 0){
+                carAverageFuelInfo.setText(decimalFormat.format(car.getAverageConsumptionFirstFuel() + car.getAverageConsumptionSecondFuel()));
+            }
+            else if(car.getAverageConsumptionFirstFuel() > 0 && car.getAverageConsumptionSecondFuel() <= 0){
+                carAverageFuelInfo.setText(decimalFormat.format(car.getAverageConsumptionFirstFuel()));
+            }
+            else if(car.getAverageConsumptionFirstFuel() <= 0 && car.getAverageConsumptionSecondFuel() > 0){
+                carAverageFuelInfo.setText(decimalFormat.format(car.getAverageConsumptionSecondFuel()));
+            }
+            else if(car.getAverageConsumptionFirstFuel() == 0 && car.getAverageConsumptionSecondFuel() == 0){
+                carAverageFuelInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                carAverageFuelInfo.setText("Brak Danych");
+            }
+            else {
+                carAverageFuelInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                carAverageFuelInfo.setText("Błędne Dane");
+            }
+
+            if(car.getAverageCostFirstFuel() > 0 && car.getAverageCostSecondFuel() > 0){
+                carAverageFuelCostInfo.setText(decimalFormat.format((car.getAverageCostFirstFuel() + car.getAverageCostSecondFuel()) / 2));
+            }
+            else if(car.getAverageCostFirstFuel() > 0 && car.getAverageCostSecondFuel() <= 0){
+                carAverageFuelCostInfo.setText(decimalFormat.format(car.getAverageCostFirstFuel()));
+            }
+            else if(car.getAverageCostFirstFuel() <= 0 && car.getAverageCostSecondFuel() > 0){
+                carAverageFuelCostInfo.setText(decimalFormat.format(car.getAverageCostSecondFuel()));
+            }
+            else if(car.getAverageCostFirstFuel() == 0 && car.getAverageCostSecondFuel() == 0){
+                carAverageFuelCostInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                carAverageFuelCostInfo.setText("Brak Danych");
+            }
+            else {
+                carAverageFuelCostInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                carAverageFuelCostInfo.setText("Błędne Dane");
+            }
         }
         else{
-            carAverageFuelInfo.setText(decimalFormat.format(car.getAvarageFuelConsumption()));
+            if(car.getAverageConsumptionFirstFuel() > 0){
+                carAverageFuelInfo.setText(decimalFormat.format(car.getAverageConsumptionFirstFuel()));
+            }
+            else if(car.getAverageConsumptionFirstFuel() == 0){
+                carAverageFuelInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                carAverageFuelInfo.setText("Brak Danych");
+            }
+            else{
+                carAverageFuelCostInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                carAverageFuelCostInfo.setText("Błędne Dane");
+            }
+
+            if(car.getAverageCostFirstFuel() > 0){
+                carAverageFuelCostInfo.setText(decimalFormat.format(car.getAverageCostFirstFuel()));
+            }
+            else if(car.getAverageCostFirstFuel() == 0){
+                carAverageFuelCostInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                carAverageFuelCostInfo.setText("Brak Danych");
+            }
+            else{
+                carAverageFuelCostInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+                carAverageFuelCostInfo.setText("Błędne Dane");
+            }
         }
 
-        carAverageFuelCostInfo = findViewById(R.id.carActivityCarAverageCostFuel);
-        if(car.getAvarageCost() == 0){
-            carAverageFuelCostInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
-            carAverageFuelCostInfo.setText("Brak Danych");
-        }
-        else if(car.getAvarageCost() < 0){
-            carAverageFuelCostInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
-            carAverageFuelCostInfo.setText("Błędne Dane");
-        }
-        else{
-            carAverageFuelCostInfo.setText(decimalFormat.format(car.getAvarageCost()));
-        }
+
     }
 
     /**
@@ -123,6 +169,7 @@ public class CarActivity extends AppCompatActivity {
 
              fuelDatabase = new FuelDatabase(mContext);
              fuelDatabase.deleteFuelsForCar(car.getId());
+
              if(carDatabase.deleteCar(car) > 0){
                  Toast.makeText(mContext, "Poprawnie usunięto samochód i tankowania !", Toast.LENGTH_LONG).show();
                  Intent intent = new Intent(mContext, AllCarsActivity.class);
@@ -140,5 +187,11 @@ public class CarActivity extends AppCompatActivity {
 
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void onEditCar(View view) {
+        Intent intent = new Intent(this, EditCarActivity.class);
+        intent.putExtra("carId", carIdForShow);
+        startActivity(intent);
     }
 }

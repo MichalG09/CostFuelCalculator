@@ -15,45 +15,69 @@ public class Car {
      */
     private String model;
     /**
-     * Average fuel consumption calculated and saved after add new / update / delete each fuel
+     * Average fuel consumption of first fuel type calculated and saved after add new / update / delete each fuel
      */
-    private double avarageFuelConsumption;
+    private double averageConsumptionFirstFuel;
     /**
-     * Average cost calculated and saved after add new / update / delete each fuel
+     * Average fuel consumption of second fuel type calculated and saved after add new / update / delete each fuel
      */
-    private double avarageCost;
+    private double averageConsumptionSecondFuel;
+    /**
+     * Average cost first fuel type calculated and saved after add new / update / delete each fuel
+     */
+    private double averageCostFirstFuel;
+    /**
+     * Average cost second fuel type calculated and saved after add new / update / delete each fuel
+     */
+    private double averageCostSecondFuel;
     /**
      * types of fuel for car
      */
     private String fuelType;
 
+    /**
+     * Number of month for date fuels take to calculation
+     */
+    private String periodTimeForCalculation;
+
     public Car(){
 
     }
 
-    public Car(String mark, String model, String fuelType) {
+    public Car(String mark, String model, String fuelType, String period) {
         this.mark = mark;
         this.model = model;
         this.fuelType = fuelType;
-        this.avarageFuelConsumption = 0;
-        this.avarageCost = 0;
+        this.averageConsumptionFirstFuel = 0;
+        this.averageCostFirstFuel = 0;
+        this.averageConsumptionSecondFuel = 0;
+        this.averageCostSecondFuel = 0;
+        this.periodTimeForCalculation = period;
     }
 
-    public Car(String mark, String model, double avarageFuelConsumption, double avarageCost, String fuelType) {
+    public Car(String mark, String model, double averageConsumptionFirstFuel, double averageCostFirstFuel,
+               double averageConsumptionSecondFuel, double averageCostSecondFuel, String fuelType, String period) {
         this.mark = mark;
         this.model = model;
-        this.avarageFuelConsumption = avarageFuelConsumption;
-        this.avarageCost = avarageCost;
+        this.averageConsumptionFirstFuel = averageConsumptionFirstFuel;
+        this.averageCostFirstFuel = averageCostFirstFuel;
+        this.averageConsumptionSecondFuel = averageConsumptionSecondFuel;
+        this.averageCostSecondFuel = averageCostSecondFuel;
         this.fuelType = fuelType;
+        this.periodTimeForCalculation = period;
     }
 
-    public Car(int id, String mark, String model, double avarageFuelConsumption, double avarageCost, String fuelType) {
+    public Car(int id, String mark, String model, double averageConsumptionFirstFuel, double averageCostFirstFuel,
+               double averageConsumptionSecondFuel, double averageCostSecondFuel, String fuelType, String period) {
         this.id = id;
         this.mark = mark;
         this.model = model;
-        this.avarageFuelConsumption = avarageFuelConsumption;
-        this.avarageCost = avarageCost;
+        this.averageConsumptionFirstFuel = averageConsumptionFirstFuel;
+        this.averageCostFirstFuel = averageCostFirstFuel;
+        this.averageConsumptionSecondFuel = averageConsumptionSecondFuel;
+        this.averageCostSecondFuel = averageCostSecondFuel;
         this.fuelType = fuelType;
+        this.periodTimeForCalculation = period;
     }
 
     public int getId() {
@@ -80,20 +104,20 @@ public class Car {
         this.model = model;
     }
 
-    public double getAvarageFuelConsumption() {
-        return avarageFuelConsumption;
+    public double getAverageConsumptionFirstFuel() {
+        return averageConsumptionFirstFuel;
     }
 
-    public void setAvarageFuelConsumption(double avarageFuelConsumption) {
-        this.avarageFuelConsumption = avarageFuelConsumption;
+    public void setAverageConsumptionFirstFuel(double averageConsumptionFirstFuel) {
+        this.averageConsumptionFirstFuel = averageConsumptionFirstFuel;
     }
 
-    public double getAvarageCost() {
-        return avarageCost;
+    public double getAverageCostFirstFuel() {
+        return averageCostFirstFuel;
     }
 
-    public void setAvarageCost(double avarageCost) {
-        this.avarageCost = avarageCost;
+    public void setAverageCostFirstFuel(double averageCostFirstFuel) {
+        this.averageCostFirstFuel = averageCostFirstFuel;
     }
 
     public String getFuelType() {
@@ -104,4 +128,36 @@ public class Car {
         this.fuelType = fuelType;
     }
 
+    public double getAverageConsumptionSecondFuel() {
+        return averageConsumptionSecondFuel;
+    }
+
+    public void setAverageConsumptionSecondFuel(double averageConsumptionSecondFuel) {
+        this.averageConsumptionSecondFuel = averageConsumptionSecondFuel;
+    }
+
+    public double getAverageCostSecondFuel() {
+        return averageCostSecondFuel;
+    }
+
+    public void setAverageCostSecondFuel(double averageCostSecondFuel) {
+        this.averageCostSecondFuel = averageCostSecondFuel;
+    }
+
+    public String getPeriodTimeForCalculation() {
+        return periodTimeForCalculation;
+    }
+
+    public void setPeriodTimeForCalculation(String periodTimeForCalculation) {
+        this.periodTimeForCalculation = periodTimeForCalculation;
+    }
+
+    public int convertPeriodTimeToInt() {
+        if(getPeriodTimeForCalculation().equals("Brak ograniczeń")){
+            return 0;
+        }
+        else{
+            return Integer.parseInt(getPeriodTimeForCalculation().substring(0,2).trim());
+        }
+    }
 }
