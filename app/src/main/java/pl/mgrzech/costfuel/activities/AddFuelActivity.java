@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -144,6 +145,9 @@ public class AddFuelActivity extends AppCompatActivity {
                 checkDecimalPleaces(s);
             }
         });
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -294,6 +298,12 @@ public class AddFuelActivity extends AppCompatActivity {
         costAddingFuelText.setText("");
         quantityAddingFuelText.setText("");
         mileageAddingFuelText.setText("");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.finish();
+        return super.onOptionsItemSelected(item);
     }
 
     /**

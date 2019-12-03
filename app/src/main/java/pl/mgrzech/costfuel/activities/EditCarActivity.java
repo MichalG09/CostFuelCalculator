@@ -2,6 +2,7 @@ package pl.mgrzech.costfuel.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -52,6 +53,9 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
 
         spinnerPeriodTime = (Spinner) findViewById(R.id.spinnerPeriodTimeEdit);
         createSpinner(spinnerPeriodTime, R.array.period_time, carForEdit.getPeriodTimeForCalculation());
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void createSpinner(Spinner spinner, int arrayId, String carData) {
@@ -116,5 +120,11 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
         else{
             Toast.makeText(this, textErrorValidation, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.finish();
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -2,6 +2,7 @@ package pl.mgrzech.costfuel.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,6 +43,9 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         setContentView(R.layout.activity_add_car);
 
         createSpinnerBranchCar();
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -152,6 +156,12 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         else{
             Toast.makeText(this, textErrorValidation, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.finish();
+        return super.onOptionsItemSelected(item);
     }
 
     /**

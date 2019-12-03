@@ -1,6 +1,8 @@
 package pl.mgrzech.costfuel.activities;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +41,9 @@ public class AllFuelsActivity extends AppCompatActivity{
         listFuels = fuelDatabase.getAllFuelsForCarId(String.valueOf(carId));
         Collections.sort(listFuels, Fuel.Comparators.SORT_BY_DATE);
         recyclerView.setAdapter(new ListAllFuelsAdapter(listFuels, this));
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -49,5 +54,11 @@ public class AllFuelsActivity extends AppCompatActivity{
         if(getIntent().hasExtra("carId")){
             carId = getIntent().getIntExtra("carId",0);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.finish();
+        return super.onOptionsItemSelected(item);
     }
 }
