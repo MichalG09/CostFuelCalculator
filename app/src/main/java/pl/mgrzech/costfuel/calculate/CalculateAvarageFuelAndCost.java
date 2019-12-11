@@ -199,4 +199,40 @@ public class CalculateAvarageFuelAndCost {
         return car;
     }
 
+    public static String[] fuelTypeForDeleting(String oldTypeFuelEditCar, String typeFuelEditCar) {
+        String oldFirstFuelType = "";
+        String oldSecondFuelType = "";
+        String newFirstFuelType = "";
+        String regexForSplitString = " + ";
+        String[] result = new String[1];
+
+        if(oldTypeFuelEditCar.contains(regexForSplitString)){
+            String[] oldFuelTypes = oldTypeFuelEditCar.split("\\+");
+            oldFirstFuelType = oldFuelTypes[0].trim();
+            oldSecondFuelType = oldFuelTypes[1].trim();
+        }
+        else{
+            oldFirstFuelType = oldTypeFuelEditCar;
+        }
+
+        String[] newFuelTypes = typeFuelEditCar.split("\\+");
+        newFirstFuelType = newFuelTypes[0].trim();
+
+        if(!oldFirstFuelType.equals(newFirstFuelType) && oldSecondFuelType.isEmpty()){
+            result[0] = oldFirstFuelType;
+        }
+        else if(!oldFirstFuelType.equals(newFirstFuelType) && !oldSecondFuelType.isEmpty()){
+            result = new String[2];
+            result[0] = oldFirstFuelType;
+            result[1] = oldSecondFuelType;
+        }
+        else if(oldFirstFuelType.equals(newFirstFuelType) && oldTypeFuelEditCar.contains(regexForSplitString)){
+            result[0] = oldSecondFuelType;
+        }
+        else if(oldFirstFuelType.equals(newFirstFuelType) && typeFuelEditCar.contains(regexForSplitString)){
+            result[0] = oldFirstFuelType;
+        }
+
+        return result;
+    }
 }

@@ -23,6 +23,7 @@
         android:layout_height="0dp"
         android:layout_weight="10"
         android:spinnerMode="dropdown"
+        android:padding="2dp"
         android:tooltipText="@string/fuelType"/>
 
     <EditText
@@ -38,7 +39,8 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="10"
+        android:padding="2dp">
 
         <EditText
             android:id="@+id/insertCostFuel"
@@ -62,7 +64,8 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="10"
+        android:padding="2dp">
 
         <EditText
             android:id="@+id/insertQuantityFuel"
@@ -86,7 +89,8 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="10"
+        android:padding="2dp">
 
         <EditText
             android:id="@+id/insertMileageFuel"

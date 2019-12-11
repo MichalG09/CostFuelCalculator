@@ -1,16 +1,23 @@
 package pl.mgrzech.costfuel.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.QuickContactBadge;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.database.CarDatabase;
@@ -43,6 +50,12 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         setContentView(R.layout.activity_add_car);
 
         createSpinnerBranchCar();
+        spinnerModelCar = (Spinner) findViewById(R.id.spinnerModelCar);
+        spinnerModelCar.setVisibility(View.INVISIBLE);
+        spinnerTypeFuel = (Spinner) findViewById(R.id.spinnerTypeFuelCar);
+        spinnerTypeFuel.setVisibility(View.INVISIBLE);
+        spinnerPeriodTIme = (Spinner) findViewById(R.id.spinnerPeriodTime);
+        spinnerPeriodTIme.setVisibility(View.INVISIBLE);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,26 +74,31 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
 
         if(parent.toString().contains("spinnerBranchCar")){
             brandAddingCar = parent.getItemAtPosition(position).toString();
+            changeBackgroundColor(spinnerBranchCar, R.color.background);
             createSpinnerModelCar(parent);
         }
         else if (parent.toString().contains("spinnerModelCar")){
             modelsAddingCar = parent.getItemAtPosition(position).toString();
+            changeBackgroundColor(spinnerModelCar, R.color.background);
             if(typeFuelAddingCar.isEmpty()){
                 createSpinnerTypeFuel(parent);
             }
         }
         else if (parent.toString().contains("spinnerTypeFuelCar")){
+            changeBackgroundColor(spinnerTypeFuel, R.color.background);
             typeFuelAddingCar = parent.getItemAtPosition(position).toString();
             if(periodTimeAddingCar.isEmpty()){
                 createSpinnerPeriodTime(parent);
             }
         }
         else if (parent.toString().contains("spinnerPeriodTime")){
+            changeBackgroundColor(spinnerPeriodTIme, R.color.background);
             periodTimeAddingCar = parent.getItemAtPosition(position).toString();
         }
     }
 
     private void createSpinnerBranchCar() {
+        Toast.makeText(this, "Wybierz markę samochodu", Toast.LENGTH_SHORT).show();
         spinnerBranchCar = (Spinner) findViewById(R.id.spinnerBranchCar);
         createSpinner(spinnerBranchCar, R.array.brands_cars);
     }
@@ -88,7 +106,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     private void createSpinnerModelCar(AdapterView<?> parent) {
         Toast.makeText(parent.getContext(), "Wybierz model samochodu", Toast.LENGTH_SHORT).show();
 
-        spinnerModelCar = (Spinner) findViewById(R.id.spinnerModelCar);
+        spinnerModelCar.setVisibility(View.VISIBLE);
         createSpinner(spinnerModelCar, getListModelCarForBrand(brandAddingCar));
         modelsAddingCar = "";
     }
@@ -96,7 +114,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     private void createSpinnerTypeFuel(AdapterView<?> parent) {
         Toast.makeText(parent.getContext(), "Wybierz typ paliwa samochodu", Toast.LENGTH_SHORT).show();
 
-        spinnerTypeFuel = (Spinner) findViewById(R.id.spinnerTypeFuelCar);
+        spinnerTypeFuel.setVisibility(View.VISIBLE);
         createSpinner(spinnerTypeFuel, R.array.types_fuel);
         typeFuelAddingCar = "";
     }
@@ -104,7 +122,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     private void createSpinnerPeriodTime(AdapterView<?> parent) {
         Toast.makeText(parent.getContext(), "Wybierz okres przeliczania kosztów", Toast.LENGTH_SHORT).show();
 
-        spinnerPeriodTIme = (Spinner) findViewById(R.id.spinnerPeriodTime);
+        spinnerPeriodTIme.setVisibility(View.VISIBLE);
         createSpinner(spinnerPeriodTIme, R.array.period_time);
         periodTimeAddingCar = "";
     }
@@ -132,19 +150,22 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         if(brandAddingCar.isEmpty()){
             textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzona marka samochodu ! \n";
             correctValidation = false;
+            spinnerBranchCar.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
         if(modelsAddingCar.isEmpty() || modelsAddingCar.equals(getString(R.string.model_car_for_validate))){
             textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony model samochodu ! \n";
             correctValidation = false;
+            spinnerModelCar.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
         if (typeFuelAddingCar.isEmpty() || typeFuelAddingCar.equals(getString(R.string.fuel_type_for_validate))){
             textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony rodzaj paliwa ! \n";
             correctValidation = false;
+            spinnerTypeFuel.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
-        int choose_period_time = R.string.choose_period_time;
         if (periodTimeAddingCar.isEmpty() || periodTimeAddingCar.equals(getString(R.string.choose_period_time))){
             textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony okres wyliczania kosztów ! \n";
             correctValidation = false;
+            spinnerPeriodTIme.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
         if(correctValidation) {
@@ -162,6 +183,10 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     public boolean onOptionsItemSelected(MenuItem item) {
         this.finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    private void changeBackgroundColor(Spinner spinner, int color) {
+        spinner.setBackgroundColor(ContextCompat.getColor(AddCarActivity.this, color));
     }
 
     /**

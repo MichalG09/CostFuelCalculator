@@ -6,4 +6,5 @@
     <color name="background">#808080</color>
     <color name="backgroundCard">#BEBEBE</color>
     <color name="colorForButton">#F5F5F5</color>
+    <color name="backdroundForValidationError">#FF0000</color>
 </resources>

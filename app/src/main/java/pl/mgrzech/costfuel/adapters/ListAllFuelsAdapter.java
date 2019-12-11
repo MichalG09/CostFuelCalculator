@@ -52,16 +52,6 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
 
         holder.dataFuel.setText(fuel.getDate() + " " + fuel.getFuelType() + "\n" + fuel.getCost() + "zł " + fuel.getQuantity() + "l " + fuel.getMileage());
 
-        holder.fuelRowEditFuel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-//                Intent intent = new Intent(mContext, CarActivity.class);
-//                intent.putExtra("fuelId", mListFuels.get(position).getId());
-//                mContext.startActivity(intent);
-            }
-        });
-
         holder.fuelRowDeleteFuel.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -119,7 +109,6 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
         public ListAllFuelsViewHolder(@NonNull View itemView) {
             super(itemView);
             dataFuel = itemView.findViewById(R.id.fuelDataRow);
-            fuelRowEditFuel = itemView.findViewById(R.id.fuelRowEditFuel);
             fuelRowDeleteFuel = itemView.findViewById(R.id.fuelRowDeleteFuel);
         }
 

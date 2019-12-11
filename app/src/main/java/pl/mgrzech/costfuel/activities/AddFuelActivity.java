@@ -4,10 +4,13 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +56,7 @@ public class AddFuelActivity extends AppCompatActivity {
     private CarDatabase carDatabase;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Car car;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     /**
      * Methods is called on create this activity. It created field for all necessary data.
@@ -77,6 +82,8 @@ public class AddFuelActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, typeFuelForChoosenCar(car.getFuelType()));
         typeFuelSpinner.setAdapter(adapter);
 
+        dateFuelAddingFuel = simpleDateFormat.format(new Date());
+        dateFuelAddingFuelText.setText(dateFuelAddingFuel);
         dateFuelAddingFuelText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,6 +99,8 @@ public class AddFuelActivity extends AppCompatActivity {
                         year,month,day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
+
+                changeBackgroundColor(dateFuelAddingFuelText, Color.RED);
             }
         });
 
@@ -118,6 +127,7 @@ public class AddFuelActivity extends AppCompatActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                changeBackgroundColor(costAddingFuelText, Color.RED);
             }
 
             @Override
@@ -134,6 +144,7 @@ public class AddFuelActivity extends AppCompatActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                changeBackgroundColor(quantityAddingFuelText, Color.RED);
             }
 
             @Override
@@ -146,8 +157,43 @@ public class AddFuelActivity extends AppCompatActivity {
             }
         });
 
+        mileageAddingFuelText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changeBackgroundColor(mileageAddingFuelText, Color.RED);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mileageAddingFuelText.setOnGenericMotionListener(new View.OnGenericMotionListener() {
+            @Override
+            public boolean onGenericMotion(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void changeBackgroundColor(TextView editText, int color) {
+
+        try{
+            ColorDrawable mileageAddingFuelTextColor = (ColorDrawable) editText.getBackground();
+            if(mileageAddingFuelTextColor.getColor() == color){
+                editText.setBackgroundColor(ContextCompat.getColor(AddFuelActivity.this, R.color.background));
+            }
+        }catch (Exception e){
+        }
     }
 
     /**
@@ -192,6 +238,7 @@ public class AddFuelActivity extends AppCompatActivity {
 
         if(dateFuelAddingFuel.isEmpty()){
             errorMessage += "Data nie może być pusta ! \n";
+            dateFuelAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
         String costAddingFuelStr = costAddingFuelText.getText().toString();
@@ -200,6 +247,7 @@ public class AddFuelActivity extends AppCompatActivity {
         }
         else{
             errorMessage += "Koszt tankowania nie może być pusty ! \n";
+            costAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
         String quantityAddingFuelStr = quantityAddingFuelText.getText().toString();
@@ -208,6 +256,7 @@ public class AddFuelActivity extends AppCompatActivity {
         }
         else{
             errorMessage += "Ilość paliwa nie może być pusta ! \n";
+            quantityAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
         String mileageAddingFuelStr = mileageAddingFuelText.getText().toString();
@@ -216,6 +265,7 @@ public class AddFuelActivity extends AppCompatActivity {
         }
         else{
             errorMessage += "Przebieg nie może być pusty ! \n";
+            mileageAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
         if(errorMessage.isEmpty()){
@@ -254,14 +304,17 @@ public class AddFuelActivity extends AppCompatActivity {
             if(newFuel.getFuelType().equals(fuel.getFuelType())){
                 if((getDateFromFuel(newFuel).before(getDateFromFuel(fuel))) && newFuel.getMileage() > fuel.getMileage()){
                     Toast.makeText(this, "Niepoprawny przebieg. Obecne tankowanie ma większy przebieg niż póżniejsze tankowania.", Toast.LENGTH_LONG).show();
+                    mileageAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
                     return false;
                 }
                 if((getDateFromFuel(newFuel).after(getDateFromFuel(fuel))) && newFuel.getMileage() < fuel.getMileage()){
                     Toast.makeText(this, "Niepoprawny przebieg. Obecne tankowanie ma mniejszy przebieg niż wcześniejsze tankowania.", Toast.LENGTH_LONG).show();
+                    mileageAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
                     return false;
                 }
                 if(newFuel.getMileage() == fuel.getMileage()){
-                    Toast.makeText(this, "Nie może być dwóch tankowań z takim samym przebiegiem.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Istnieje tankowanie z takim samym przebiegiem.", Toast.LENGTH_LONG).show();
+                    mileageAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
                     return false;
                 }
             }

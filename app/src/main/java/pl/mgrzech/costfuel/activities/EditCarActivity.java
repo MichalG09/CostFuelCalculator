@@ -1,5 +1,7 @@
 package pl.mgrzech.costfuel.activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -18,7 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import pl.mgrzech.costfuel.R;
+import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
 import pl.mgrzech.costfuel.database.CarDatabase;
+import pl.mgrzech.costfuel.database.FuelDatabase;
 import pl.mgrzech.costfuel.models.Car;
 
 public class EditCarActivity  extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -33,14 +38,22 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
     private Spinner spinnerPeriodTime;
     private String typeFuelEditCar;
     private String periodTimeEditCar;
+    private String oldTypeFuelEditCar;
+    private AlertDialog.Builder builder;
+    private FuelDatabase fuelDatabase;
+    private Context mContext;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getIncomingIntent();
-        carDatabase = new CarDatabase(this);
         setContentView(R.layout.activity_edit_car);
+
+        mContext = this;
+        carDatabase = new CarDatabase(mContext);
         carForEdit = carDatabase.getCarById(carIdForEdit);
+        oldTypeFuelEditCar = carForEdit.getFuelType();
 
         branchCar = findViewById(R.id.branchEditCar);
         branchCar.setText(carForEdit.getMark());
@@ -56,10 +69,11 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     private void createSpinner(Spinner spinner, int arrayId, String carData) {
-        adapter = ArrayAdapter.createFromResource(this,
+        adapter = ArrayAdapter.createFromResource(mContext,
                 arrayId, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -108,19 +122,55 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
             correctValidation = false;
         }
 
+        String[] str;
+        String[] str2;
         if(correctValidation) {
-            carForEdit.setFuelType(typeFuelEditCar);
-            carForEdit.setPeriodTimeForCalculation(periodTimeEditCar);
-            carDatabase.updateCar(carForEdit);
-            Toast.makeText(this, "Poprawnie edytowano samochód !", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, CarActivity.class);
-            intent.putExtra("carId", carForEdit.getId());
-            startActivity(intent);
+            if(!oldTypeFuelEditCar.equals(typeFuelEditCar)){
+                if(!typeFuelEditCar.contains(oldTypeFuelEditCar)){
+                    final String[] temp = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuelEditCar, typeFuelEditCar);
+
+                    builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("UWAGA !");
+                    builder.setMessage("Zmiana rodzaju paliwa spowoduje usunięcie tankowań dla paliwa: " + Arrays.toString(temp));
+
+                    builder.setPositiveButton("POTWIERDŹ", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            fuelDatabase = new FuelDatabase(mContext);
+                            for(String fuelTypeOne : temp){
+                                if(fuelDatabase.calcNumberFuelsForTypeFuel(carIdForEdit, fuelTypeOne) > 0)
+                                    fuelDatabase.deleteOneTypeFuelsForCar(carIdForEdit, fuelTypeOne);
+                            }
+
+                            carForEdit.setFuelType(typeFuelEditCar);
+                            carForEdit.setPeriodTimeForCalculation(periodTimeEditCar);
+                            carForEdit = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, carForEdit);
+                            carDatabase.updateCar(carForEdit);
+                            Toast.makeText(mContext, "Poprawnie edytowano samochód !", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(mContext, CarActivity.class);
+                            intent.putExtra("carId", carForEdit.getId());
+                            startActivity(intent);
+                        }
+                    });
+
+                    builder.setNegativeButton("ANULUJ", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            }
         }
         else{
             Toast.makeText(this, textErrorValidation, Toast.LENGTH_LONG).show();
         }
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -14,7 +14,7 @@
         android:textSize="25dp"
         android:padding="5dp"
         android:gravity="center"
-        android:layout_weight="10"/>
+        android:layout_weight="12"/>
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerBranchCar"
@@ -55,7 +55,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="35">
+        android:layout_weight="33">
 
     </LinearLayout>
 

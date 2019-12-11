@@ -270,6 +270,17 @@ public class FuelDatabase extends SQLiteOpenHelper {
     }
 
     /**
+     * Methods delete all one type fuels for one car in database.
+     * Meotda kasuje wszystkie tankowania jednego rodzaju paliwa dla danego samochodu w bazie danych.
+     * @param carId
+     * @return
+     */
+    public int deleteOneTypeFuelsForCar(int carId, String fuelType) {
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(TABLE_FUELS, KEY_CAR_ID + "=? AND " + KEY_FUEL_TYPE + "=?", new String[]{String.valueOf(carId), fuelType});
+    }
+
+    /**
      * Method returns fuel searched by date and carId from database. Used only in test
      * Metoda zwraca tankowanie wyszukany przez date i carId z bazy danych. Używane tylko przy testach.
      * @param date

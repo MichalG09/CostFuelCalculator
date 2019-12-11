@@ -26,7 +26,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="70"
+                android:layout_weight="85"
                 android:gravity="center">
 
                 <TextView
@@ -37,23 +37,6 @@
                     android:textSize="15dp"
                     android:textStyle="bold"/>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/fuelRowEditFuel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="15"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:background="@drawable/left_border"
-                android:clickable="true">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/edit_button"
-                    android:padding="5dp"/>
             </LinearLayout>
 
             <LinearLayout

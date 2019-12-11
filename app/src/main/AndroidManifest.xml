@@ -21,19 +21,25 @@
         </activity>
         <activity
             android:name=".activities.AddCarActivity"
-            android:label="KALKULATOR SPALANIA"></activity>
+            android:label="KALKULATOR SPALANIA"
+            android:autoRemoveFromRecents="true"
+            android:parentActivityName=".activities.AllCarsActivity"/>
         <activity
             android:name=".activities.AddFuelActivity"
-            android:label="KALKULATOR SPALANIA"></activity>
+            android:label="KALKULATOR SPALANIA"
+            android:autoRemoveFromRecents="true"
+            android:parentActivityName=".activities.AllCarsActivity"/>
         <activity
             android:name=".activities.CarActivity"
-            android:label="KALKULATOR SPALANIA"></activity>
+            android:label="KALKULATOR SPALANIA"
+            android:autoRemoveFromRecents="true"
+            android:parentActivityName=".activities.AllCarsActivity"/>
         <activity
             android:name=".activities.AllFuelsActivity"
-            android:label="KALKULATOR SPALANIA" />
+            android:label="KALKULATOR SPALANIA"/>
         <activity
             android:name=".activities.EditCarActivity"
-            android:label="KALKULATOR SPALANIA" />
+            android:label="KALKULATOR SPALANIA"/>
     </application>
 
 </manifest>
