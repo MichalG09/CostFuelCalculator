@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.AllCarsActivity">
+
+    <item
+        android:id="@+id/menu_instruction"
+        android:orderInCategory="100"
+        android:title="Instruckja"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_about"
+        android:orderInCategory="100"
+        android:title="O Programie"
+        app:showAsAction="never" />
+</menu>

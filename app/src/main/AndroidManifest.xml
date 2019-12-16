@@ -40,6 +40,16 @@
         <activity
             android:name=".activities.EditCarActivity"
             android:label="KALKULATOR SPALANIA"/>
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="KALKULATOR SPALANIA"
+            android:autoRemoveFromRecents="true"
+            android:parentActivityName=".activities.AllCarsActivity"/>
+        <activity
+            android:name=".activities.InstructionActivity"
+            android:label="KALKULATOR SPALANIA"
+            android:autoRemoveFromRecents="true"
+            android:parentActivityName=".activities.AllCarsActivity"/>
     </application>
 
 </manifest>

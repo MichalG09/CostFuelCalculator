@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import pl.mgrzech.costfuel.R;
@@ -57,8 +58,12 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         spinnerPeriodTIme = (Spinner) findViewById(R.id.spinnerPeriodTime);
         spinnerPeriodTIme.setVisibility(View.INVISIBLE);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
     /**

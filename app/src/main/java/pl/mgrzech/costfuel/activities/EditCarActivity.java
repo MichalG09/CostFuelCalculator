@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +53,7 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
 
         mContext = this;
         carDatabase = new CarDatabase(mContext);
+        fuelDatabase = new FuelDatabase(mContext);
         carForEdit = carDatabase.getCarById(carIdForEdit);
         oldTypeFuelEditCar = carForEdit.getFuelType();
 
@@ -67,9 +69,12 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
         spinnerPeriodTime = (Spinner) findViewById(R.id.spinnerPeriodTimeEdit);
         createSpinner(spinnerPeriodTime, R.array.period_time, carForEdit.getPeriodTimeForCalculation());
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
     private void createSpinner(Spinner spinner, int arrayId, String carData) {
@@ -125,8 +130,8 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
         String[] str;
         String[] str2;
         if(correctValidation) {
-            if(!oldTypeFuelEditCar.equals(typeFuelEditCar)){
-                if(!typeFuelEditCar.contains(oldTypeFuelEditCar)){
+            if(!oldTypeFuelEditCar.equals(typeFuelEditCar)) {
+                if (!typeFuelEditCar.contains(oldTypeFuelEditCar)) {
                     final String[] temp = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuelEditCar, typeFuelEditCar);
 
                     builder = new AlertDialog.Builder(mContext);
@@ -137,19 +142,11 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             fuelDatabase = new FuelDatabase(mContext);
-                            for(String fuelTypeOne : temp){
-                                if(fuelDatabase.calcNumberFuelsForTypeFuel(carIdForEdit, fuelTypeOne) > 0)
+                            for (String fuelTypeOne : temp) {
+                                if (fuelDatabase.calcNumberFuelsForTypeFuel(carIdForEdit, fuelTypeOne) > 0)
                                     fuelDatabase.deleteOneTypeFuelsForCar(carIdForEdit, fuelTypeOne);
                             }
-
-                            carForEdit.setFuelType(typeFuelEditCar);
-                            carForEdit.setPeriodTimeForCalculation(periodTimeEditCar);
-                            carForEdit = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, carForEdit);
-                            carDatabase.updateCar(carForEdit);
-                            Toast.makeText(mContext, "Poprawnie edytowano samochód !", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(mContext, CarActivity.class);
-                            intent.putExtra("carId", carForEdit.getId());
-                            startActivity(intent);
+                            saveEditedCar();
                         }
                     });
 
@@ -163,6 +160,12 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
                     alertDialog = builder.create();
                     alertDialog.show();
                 }
+                else{
+                    saveEditedCar();
+                }
+            }
+            else {
+                saveEditedCar();
             }
         }
         else{
@@ -170,6 +173,17 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
         }
     }
 
+    private void saveEditedCar() {
+        carForEdit.setFuelType(typeFuelEditCar);
+        carForEdit.setPeriodTimeForCalculation(periodTimeEditCar);
+        carDatabase.updateCar(carForEdit);
+        carForEdit = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, carForEdit);
+        carDatabase.updateCar(carForEdit);
+        Toast.makeText(mContext, "Poprawnie edytowano samochód !", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(mContext, CarActivity.class);
+        intent.putExtra("carId", carForEdit.getId());
+        startActivity(intent);
+    }
 
 
     @Override
