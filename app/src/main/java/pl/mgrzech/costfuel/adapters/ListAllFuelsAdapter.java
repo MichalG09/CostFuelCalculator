@@ -50,7 +50,7 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
 
         fuel = mListFuels.get(position);
 
-        holder.dataFuel.setText(fuel.getDate() + " " + fuel.getFuelType() + "\n" + fuel.getCost() + "zł " + fuel.getQuantity() + "l " + fuel.getMileage());
+        holder.dataFuel.setText(fuel.getDate() + " " + fuel.getFuelType() + "\n" + fuel.getCost() + "zł " + fuel.getQuantity() + "l " + fuel.getMileage() + "km");
 
         holder.fuelRowDeleteFuel.setOnClickListener( new View.OnClickListener(){
             @Override

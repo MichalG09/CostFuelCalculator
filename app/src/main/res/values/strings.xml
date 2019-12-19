@@ -884,4 +884,8 @@
     <string name="no_data">Brak danych</string>
     <string name="error_data">Błędne dane</string>
     <string name="regex_for_split_fuel_types">\\+</string>
+    <string name="car_activity_message_to_confirm_delete_car">Na pewno chcesz usunąć samochód</string>
+    <string name="car_activity_message_deleted_car">Poprawnie usunięto samochód i tankowania !</string>
+    <string name="activity_car_command_delete_car">USUŃ</string>
+    <string name="car_activity_command_cancel">ANULUJ</string>
 </resources>

@@ -143,7 +143,7 @@ public class CarDatabase extends SQLiteOpenHelper {
         contentValues.put(KEY_FUEL_CONSUMPTION_FIRST, String.valueOf(car.getAverageConsumptionFirstFuel()));
         contentValues.put(KEY_COST_FIRST, String.valueOf(car.getAverageCostFirstFuel()));
         contentValues.put(KEY_FUEL_CONSUMPTION_SECOND, String.valueOf(car.getAverageConsumptionSecondFuel()));
-        contentValues.put(KEY_COST_SECOND, String.valueOf(car.getAverageConsumptionSecondFuel()));
+        contentValues.put(KEY_COST_SECOND, String.valueOf(car.getAverageCostSecondFuel()));
         contentValues.put(KEY_FUEL_TYPE, car.getFuelType());
         contentValues.put(KEY_PERIOD_CALC, String.valueOf(car.getPeriodTimeForCalculation()));
 
