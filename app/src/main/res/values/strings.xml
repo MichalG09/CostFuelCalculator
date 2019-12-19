@@ -881,4 +881,7 @@
     <string name="choose_period_time">Okres wyliczania kosztów</string>
     <string name="model_car_for_validate">Model samochodu</string>
     <string name="fuel_type_for_validate">Rodzaj paliwa</string>
+    <string name="no_data">Brak danych</string>
+    <string name="error_data">Błędne dane</string>
+    <string name="regex_for_split_fuel_types">\\+</string>
 </resources>
