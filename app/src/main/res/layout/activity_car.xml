@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--Main layout-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/normalBackground"
+    android:orientation="vertical"
     android:weightSum="100">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -24,40 +25,41 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="30"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="#FFE57F">
+        android:layout_weight="30"
+        app:cardBackgroundColor="@color/background_color_cardView">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="100"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="100">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="40"
-                android:weightSum="100"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="100">
 
                 <TextView
                     android:id="@+id/carActivityCarMark"
-                    android:layout_height="match_parent"
                     android:layout_width="0dp"
-                    android:layout_weight="85"
-                    android:textSize="30dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:gravity="center" />
+                    android:layout_weight="85"
+                    android:gravity="center"
+                    android:textSize="30sp" />
 
                 <ImageButton
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="15"
                     android:layout_gravity="center"
-                    android:src="@drawable/edit_button"
+                    android:layout_weight="15"
+                    android:background="@drawable/white_border"
+                    android:contentDescription="@string/activity_car_edit_button"
                     android:onClick="onEditCar"
-                    android:background="@drawable/left_border">
+                    android:src="@drawable/edit_button">
                 </ImageButton>
             </LinearLayout>
 
@@ -65,26 +67,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="40"
-                android:weightSum="100"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="100">
 
                 <TextView
                     android:id="@+id/carActivityCarModel"
-                    android:layout_height="match_parent"
                     android:layout_width="0dp"
-                    android:layout_weight="85"
-                    android:textSize="30dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:gravity="center" />
+                    android:layout_weight="85"
+                    android:gravity="center"
+                    android:textSize="30sp" />
 
                 <ImageButton
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="15"
                     android:layout_gravity="center"
-                    android:src="@drawable/delete_button"
+                    android:layout_weight="15"
+                    android:background="@drawable/white_border"
                     android:onClick="onDeleteCar"
-                    android:background="@drawable/left_border">
+                    android:src="@drawable/delete_button"
+                    android:contentDescription="Button for delete car">
                 </ImageButton>
             </LinearLayout>
 
@@ -92,17 +95,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="20"
-                android:weightSum="100"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="100">
 
                 <TextView
                     android:id="@+id/carActivityCarFuelType"
-                    android:layout_height="match_parent"
                     android:layout_width="0dp"
-                    android:layout_weight="85"
-                    android:textSize="12dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:gravity="center" />
+                    android:layout_weight="85"
+                    android:gravity="center"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -112,41 +115,43 @@
         android:id="@+id/testCardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="25"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="#aabbcc">
+        android:layout_weight="25"
+        app:cardBackgroundColor="@color/background_color_cardView">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="100"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="100">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="25"
-                android:weightSum="100"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="100">
 
                 <TextView
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="90"
-                    android:textSize="15dp"
-                    android:gravity="top|left"
+                    android:gravity="top|start"
                     android:paddingLeft="3dp"
-                    android:text="Spalanie:"
-                    android:layout_height="wrap_content"/>
+                    android:paddingRight="3dp"
+                    android:text="@string/car_activity_consumption"
+                    android:textSize="15sp" />
 
                 <ImageButton
                     android:id="@+id/changeShowDataForFuelConsumption"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/swap_horiz"
                     android:layout_weight="10"
                     android:background="@android:color/transparent"
-                    android:visibility="invisible"
-                    android:padding="2dp"/>
+                    android:contentDescription="@string/car_activity_change_position_fuel_position"
+                    android:padding="2dp"
+                    android:src="@drawable/swap_horiz"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
@@ -155,18 +160,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="50"
-                android:weightSum="100"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="100">
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="25"
-                android:textSize="20dp"
-                android:gravity="bottom|right"
-                android:text="l/100km"
-                android:paddingRight="3dp"/>
+                android:gravity="bottom|end"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp"
+                android:text="@string/car_activity_unit_for_average_consumption"
+                android:textSize="20sp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -174,41 +180,43 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="25"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="#aabbcc">
+        android:layout_weight="25"
+        app:cardBackgroundColor="@color/background_color_cardView">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="100"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="100">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="25"
-                android:weightSum="100"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="100">
 
                 <TextView
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="90"
-                    android:textSize="15dp"
-                    android:gravity="top|left"
-                    android:paddingLeft="3dp"
-                    android:text="Koszt:"
-                    android:layout_height="wrap_content"/>
+                    android:gravity="top|start"
+                    android:paddingStart="3dp"
+                    android:paddingEnd="3dp"
+                    android:text="@string/car_activity_cost"
+                    android:textSize="15sp" />
 
                 <ImageButton
                     android:id="@+id/changeShowDataForFuelCost"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/swap_horiz"
                     android:layout_weight="10"
                     android:background="@android:color/transparent"
-                    android:visibility="invisible"
-                    android:padding="2dp"/>
+                    android:contentDescription="@string/car_activity_change_position_fuel_position"
+                    android:padding="2dp"
+                    android:src="@drawable/swap_horiz"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
@@ -217,27 +225,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="50"
-                android:weightSum="100"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="100">
             </LinearLayout>
-
-<!--            <TextView-->
-<!--                android:id="@+id/carActivityCarAverageCostFuel"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_weight="50"-->
-<!--                android:textSize="40dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:gravity="center" />-->
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="25"
-                android:gravity="bottom|right"
-                android:text="zł/100km"
-                android:textSize="20dp"
-                android:paddingRight="3dp"/>
+                android:gravity="bottom|end"
+                android:text="@string/car_activity_unit_for_average_cost"
+                android:textSize="20sp"
+                android:paddingEnd="3dp"
+                android:paddingStart="3dp"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -246,7 +246,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_margin="10dp"
         android:background="@color/colorForButton"
         android:text="@string/buttonAddFuel"
@@ -256,7 +256,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_margin="10dp"
         android:background="@color/colorForButton"
         android:text="@string/buttonShowFuels"

@@ -3,10 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="background">#808080</color>
+    <color name="normalBackground">#808080</color>
     <color name="backgroundCard">#BEBEBE</color>
     <color name="colorForButton">#F5F5F5</color>
     <color name="backdroundForValidationError">#FF0000</color>
     <color name="colorForLink">#0088FF</color>
     <color name="backgroundDark">#505050</color>
+    <color name="background_color_cardView">#FFE57F</color>
 </resources>

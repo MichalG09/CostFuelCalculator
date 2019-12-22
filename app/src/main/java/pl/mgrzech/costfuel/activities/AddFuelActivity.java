@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,10 +22,9 @@ import androidx.core.content.ContextCompat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
@@ -40,35 +37,29 @@ public class AddFuelActivity extends AppCompatActivity {
 
     private TextView dateFuelAddingFuelText;
     private String dateFuelAddingFuel = "";
-    private TextView typeFuelAddingFuelText;
-    private String typeFuelAddingFuel = "";
     private TextView costAddingFuelText;
     private double costAddingFuel;
     private TextView quantityAddingFuelText;
     private double quantityAddingFuel;
     private TextView mileageAddingFuelText;
     private int mileageAddingFuel;
-    private int month;
-    private int year;
-    private int day;
     private int carIdForFuel;
     private Spinner typeFuelSpinner;
     private FuelDatabase fuelDatabase;
     private CarDatabase carDatabase;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Car car;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     /**
      * Methods is called on create this activity. It created field for all necessary data.
-     * @param savedInstanceState
+     * @param savedInstanceState Bundle
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_fuel);
-
         getIncomingIntent();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
 
         dateFuelAddingFuelText = findViewById(R.id.insertDataFuel);
         costAddingFuelText = findViewById(R.id.insertCostFuel);
@@ -98,10 +89,10 @@ public class AddFuelActivity extends AppCompatActivity {
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener,
                         year,month,day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
 
-                changeBackgroundColor(dateFuelAddingFuelText, Color.RED);
+                changeBackgroundColor(dateFuelAddingFuelText);
             }
         });
 
@@ -128,7 +119,7 @@ public class AddFuelActivity extends AppCompatActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                changeBackgroundColor(costAddingFuelText, Color.RED);
+                changeBackgroundColor(costAddingFuelText);
             }
 
             @Override
@@ -145,7 +136,7 @@ public class AddFuelActivity extends AppCompatActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                changeBackgroundColor(quantityAddingFuelText, Color.RED);
+                changeBackgroundColor(quantityAddingFuelText);
             }
 
             @Override
@@ -161,7 +152,7 @@ public class AddFuelActivity extends AppCompatActivity {
         mileageAddingFuelText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                changeBackgroundColor(mileageAddingFuelText, Color.RED);
+                changeBackgroundColor(mileageAddingFuelText);
             }
 
             @Override
@@ -182,7 +173,7 @@ public class AddFuelActivity extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -190,21 +181,28 @@ public class AddFuelActivity extends AppCompatActivity {
         }
     }
 
-    private void changeBackgroundColor(TextView editText, int color) {
+    /**
+     * Methods change background color for basic TextView
+     * Metoda zmienia kolor TextView na kolor bazowy TextView
+     * @param editText editText where background color will change
+     *
+     */
+    private void changeBackgroundColor(TextView editText) {
 
         try{
             ColorDrawable mileageAddingFuelTextColor = (ColorDrawable) editText.getBackground();
-            if(mileageAddingFuelTextColor.getColor() == color){
-                editText.setBackgroundColor(ContextCompat.getColor(AddFuelActivity.this, R.color.background));
+            if(mileageAddingFuelTextColor.getColor() == Color.RED){
+                editText.setBackgroundColor(ContextCompat.getColor(this, R.color.normalBackground));
             }
         }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     /**
      * Method check place decimal. If decimal places is more than 2, it delete number after second decimal pleaces.
      * Metoda sprawdza ilość miejsc dziesięnych. Jeżeli miejsc jest więcej niż 2 to usuwa liczby po drugim miejscu dziesiętnym.
-     * @param value
+     * @param value value insert into input field
      */
     public void checkDecimalPleaces(Editable value){
         String valueStr = value.toString ();
@@ -224,9 +222,8 @@ public class AddFuelActivity extends AppCompatActivity {
      * Meotda pobiera id samochodu, dla którego dodawane jest tankowanie.
      */
     private void getIncomingIntent(){
-        if(getIntent().hasExtra("carId")){
-            carIdForFuel = getIntent().getIntExtra("carId",0);
-        }
+        if(getIntent().hasExtra(getString(R.string.carIdIncommingIntent)))
+            carIdForFuel = getIntent().getIntExtra(getString(R.string.carIdIncommingIntent), 0);
     }
 
     /**
@@ -234,15 +231,15 @@ public class AddFuelActivity extends AppCompatActivity {
      * and calculate a average cost fuels per 100 km and average fuel consumption per 100 km for new data.
      * Metoda zapisywania nowego tankowania z grafiki dodawania nowego tankowania. Sprawdze poprawność danych i zapisuje nowe tankowanie do bazy danych.
      * Przelicza średnia spalania na 100 km i średni koszt paliwa na 100 km dla nowych danych.
-     * @param view
+     * @param view view
      */
     public void saveFuel(View view) {
 
         String errorMessage = "";
-        typeFuelAddingFuel = String.valueOf(typeFuelSpinner.getSelectedItem());
+        String typeFuelAddingFuel = String.valueOf(typeFuelSpinner.getSelectedItem());
 
         if(dateFuelAddingFuel.isEmpty()){
-            errorMessage += "Data nie może być pusta ! \n";
+            errorMessage += getString(R.string.add_fuel_activity_incorrect_date);
             dateFuelAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
@@ -251,7 +248,7 @@ public class AddFuelActivity extends AppCompatActivity {
             costAddingFuel = Double.parseDouble(costAddingFuelStr);
         }
         else{
-            errorMessage += "Koszt tankowania nie może być pusty ! \n";
+            errorMessage += getString(R.string.add_fuel_activity_incorrect_cost_fuel);
             costAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
@@ -260,7 +257,7 @@ public class AddFuelActivity extends AppCompatActivity {
             quantityAddingFuel = Double.parseDouble(quantityAddingFuelStr);
         }
         else{
-            errorMessage += "Ilość paliwa nie może być pusta ! \n";
+            errorMessage += getString(R.string.add_fuel_activity_incorrect_quantity_fuel);
             quantityAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
@@ -269,7 +266,7 @@ public class AddFuelActivity extends AppCompatActivity {
             mileageAddingFuel = Integer.parseInt(mileageAddingFuelStr);
         }
         else{
-            errorMessage += "Przebieg nie może być pusty ! \n";
+            errorMessage += getString(R.string.add_fuel_activity_incorrect_mileage);
             mileageAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
@@ -279,15 +276,15 @@ public class AddFuelActivity extends AppCompatActivity {
 
             if(checkCorrectMileageFuel(newFuel, fuelDatabase)){
                 fuelDatabase.addFuel(newFuel, String.valueOf(carIdForFuel));
-                Intent intent = new Intent(this, CarActivity.class);
                 clearView();
-                Car car = carDatabase.getCarById(carIdForFuel);
+                car = carDatabase.getCarById(carIdForFuel);
                 car = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, car);
                 carDatabase.updateCar(car);
-                intent.putExtra("carId", car.getId());
+                Intent intent = new Intent(this, CarActivity.class);
+                intent.putExtra(getString(R.string.carIdIncommingIntent), car.getId());
                 startActivity(intent);
 
-                Toast.makeText(this, "Poprawnie zapisano tankowanie !", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.add_fuel_activity_correct_fuel), Toast.LENGTH_LONG).show();
             }
         }
         else{
@@ -299,56 +296,55 @@ public class AddFuelActivity extends AppCompatActivity {
      * Method check correct mileage fuel. Earlier fuel can not have higher mileage. Later fuel can not have lower mileage.
      * Meotda sprawdza czy przebieg tankowania jest poprawny. Wcześniejsze tankowanie nie może mieć wiekszego przebiegu.
      * Późniejsze tankowanie nie może mieć mniejszego tankowania.
-     * @param newFuel
-     * @param fuelDatabase
-     * @return
+     * @param newFuel Fuel for check to correct milleage
+     * @param fuelDatabase database witj fuels
+     * @return if correct return true, if incorrect return false
      */
     private boolean checkCorrectMileageFuel(Fuel newFuel, FuelDatabase fuelDatabase) {
 
         for(Fuel fuel : fuelDatabase.getAllFuelsForCarId(String.valueOf(carIdForFuel))){
             if(newFuel.getFuelType().equals(fuel.getFuelType())){
                 if((getDateFromFuel(newFuel).before(getDateFromFuel(fuel))) && newFuel.getMileage() > fuel.getMileage()){
-                    Toast.makeText(this, "Niepoprawny przebieg. Obecne tankowanie ma większy przebieg niż póżniejsze tankowania.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.add_fuel_activity_incorrect_mileage_too_high), Toast.LENGTH_LONG).show();
                     mileageAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
                     return false;
                 }
                 if((getDateFromFuel(newFuel).after(getDateFromFuel(fuel))) && newFuel.getMileage() < fuel.getMileage()){
-                    Toast.makeText(this, "Niepoprawny przebieg. Obecne tankowanie ma mniejszy przebieg niż wcześniejsze tankowania.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.add_fuel_activity_incorrect_mileage_too_low), Toast.LENGTH_LONG).show();
                     mileageAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
                     return false;
                 }
                 if(newFuel.getMileage() == fuel.getMileage()){
-                    Toast.makeText(this, "Istnieje tankowanie z takim samym przebiegiem.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getResources().getString(R.string.add_fuel_activity_incorrect_mileage_doubled), Toast.LENGTH_LONG).show();
                     mileageAddingFuelText.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
                     return false;
                 }
             }
         }
-
         return true;
     }
 
     /**
-     * Method return date guel in Date (from String)
+     * Method return date fuel in Date (from String)
      * Meotda zwraca date tankowania w formacie Date (ze Stringa)
-     * @param fuel
-     * @return
+     * @param fuel fuel for get date
+     * @return date
      */
     private Date getDateFromFuel(Fuel fuel) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
         Date date = null;
 
         try{
             date = simpleDateFormat.parse(fuel.getDate());
         }
         catch(ParseException pe) {
+            pe.printStackTrace();
         }
-
         return date;
     }
 
     /**
-     * Method clear all field with input data for fuel after correct added new fuel.
+     * Method clear all input field for fuel after correct added new fuel.
      * metoda czyści wszystkie pola do wprowadzania danych po poprawnym zapisaniu tankowania.
      */
     private void clearView(){
@@ -367,21 +363,20 @@ public class AddFuelActivity extends AppCompatActivity {
     /**
      * Method check type fuel for choosen car.
      * Metoda sprawdza typ paliwa dla danego samochodu
-     * @param fuelType
-     * @return
+     * @param fuelType fuel type
+     * @return return table with single fuel type
      */
     private String[] typeFuelForChoosenCar(String fuelType) {
-        if(fuelType.equals("PB")){
-            return new String[]{"PB"};
+        switch (fuelType) {
+            case "PB":
+                return new String[]{"PB"};
+            case "ON":
+                return new String[]{"ON"};
+            case "PB + LPG":
+                return new String[]{"PB", "LPG"};
+            case "ON + AddBlue":
+                return new String[]{"ON", "AddBlue"};
         }
-        else if(fuelType.equals("ON")){
-            return new String[]{"ON"};
-        }
-        else if(fuelType.equals("PB + LPG")){
-            return new String[]{"PB", "LPG"};
-        }
-        else{
-            return new String[]{"ON", "AddBlue"};
-        }
+        return new String[]{""};
     }
 }

@@ -1,6 +1,5 @@
 package pl.mgrzech.costfuel.activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,29 +25,25 @@ import pl.mgrzech.costfuel.database.CarDatabase;
 import pl.mgrzech.costfuel.database.FuelDatabase;
 import pl.mgrzech.costfuel.models.Car;
 
+/**
+ * Start Activity
+ */
 public class CarActivity extends AppCompatActivity {
 
     private int carIdForShow;
-    private TextView carMarkInfo;
-    private TextView carModelInfo;
-    private TextView carTypeFuelInfo;
     private String averageFuelConsumptionForFirstFuel;
     private String averageFuelConsumptionForSecondFuel;
     private String averageFuelCostForFirstFuel;
     private String averageFuelCostForSecondFuel;
     private CarDatabase carDatabase;
     private FuelDatabase fuelDatabase;
-    private AlertDialog alertDialog;
-    private AlertDialog.Builder builder;
-    private Car car = null;
-    private Context mContext;
+    private Car car;
     private DecimalFormat decimalFormat = new DecimalFormat("##0.00");
     private String noDataMessage;
     private String errorDataMessage;
     private LinearLayout averageFuelConsumptionLinearLayout;
     private ImageButton imageButtonChangeShowDataForFuelConsumption;
     private String charToCheckTwoTypesFuel = "+";
-    private Toolbar toolbar;
     private String firstFuel;
     private String secondFuel;
     private LinearLayout averageFuelCostLinearLayout;
@@ -59,21 +54,20 @@ public class CarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car);
         getIncomingIntent();
-        mContext = this;
 
         noDataMessage = getResources().getString(R.string.no_data);
         errorDataMessage = getResources().getString(R.string.error_data);
 
-        carDatabase = new CarDatabase(mContext);
+        carDatabase = new CarDatabase(this);
         car = carDatabase.getCarById(carIdForShow);
 
-        carMarkInfo = findViewById(R.id.carActivityCarMark);
+        TextView carMarkInfo = findViewById(R.id.carActivityCarMark);
         carMarkInfo.setText(car.getMark());
 
-        carModelInfo = findViewById(R.id.carActivityCarModel);
+        TextView carModelInfo = findViewById(R.id.carActivityCarModel);
         carModelInfo.setText(car.getModel());
 
-        carTypeFuelInfo = findViewById(R.id.carActivityCarFuelType);
+        TextView carTypeFuelInfo = findViewById(R.id.carActivityCarFuelType);
         carTypeFuelInfo.setText(car.getFuelType());
 
         averageFuelConsumptionLinearLayout = findViewById(R.id.averangeFuelConsumptionLayout);
@@ -98,7 +92,7 @@ public class CarActivity extends AppCompatActivity {
         showAverageFuelConsumptionInOnePosition();
         showAverageCostFuelInOnePosition();
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -111,8 +105,8 @@ public class CarActivity extends AppCompatActivity {
      * Metoda pobierająca car Id dla którego zostaną wyświetlona wszystkie informacje
      */
     private void getIncomingIntent(){
-        if(getIntent().hasExtra("carId")){
-            carIdForShow = getIntent().getIntExtra("carId", 0);
+        if(getIntent().hasExtra(getString(R.string.carIdIncommingIntent))){
+            carIdForShow = getIntent().getIntExtra(getString(R.string.carIdIncommingIntent), 0);
         }
     }
 
@@ -120,11 +114,11 @@ public class CarActivity extends AppCompatActivity {
      * Methods for click add fuel
      * Metoda dla klikniecie dodaj tankowanie
      *
-     * @param view
+     * @param view view
      */
     public void onAddFuel(View view) {
         Intent intent = new Intent(this, AddFuelActivity.class);
-        intent.putExtra("carId", carIdForShow);
+        intent.putExtra(getString(R.string.carIdIncommingIntent), carIdForShow);
         startActivity(intent);
     }
 
@@ -132,11 +126,11 @@ public class CarActivity extends AppCompatActivity {
      * Methods for click show all fuels
      * Metoda dla klikniecie pokaż wszystkie tankowania
      *
-     * @param view
+     * @param view view
      */
     public void onShowAllFuels(View view) {
         Intent intent = new Intent(this, AllFuelsActivity.class);
-        intent.putExtra("carId", carIdForShow);
+        intent.putExtra(getString(R.string.carIdIncommingIntent), carIdForShow);
         startActivity(intent);
     }
 
@@ -144,23 +138,23 @@ public class CarActivity extends AppCompatActivity {
      * Methods for click delete Car
      * Metoda dla klikniecie usuń samochód
      *
-     * @param view
+     * @param view view
      */
     public void onDeleteCar(View view) {
 
-        builder = new AlertDialog.Builder(view.getContext());
-        builder.setTitle(getResources().getString(R.string.car_activity_message_to_confirm_delete_car) + car.getMark() + " " + car.getModel() + "?");
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setMessage(getResources().getString(R.string.car_activity_message_to_confirm_delete_car) + " "+ car.getMark() + " " + car.getModel() + "?");
 
         builder.setPositiveButton(getResources().getString(R.string.activity_car_command_delete_car), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-             fuelDatabase = new FuelDatabase(mContext);
+             fuelDatabase = new FuelDatabase(CarActivity.this);
              fuelDatabase.deleteFuelsForCar(car.getId());
 
              if(carDatabase.deleteCar(car) > 0){
-                 Toast.makeText(mContext, getResources().getString(R.string.car_activity_message_deleted_car), Toast.LENGTH_LONG).show();
-                 Intent intent = new Intent(mContext, AllCarsActivity.class);
+                 Toast.makeText(CarActivity.this, getResources().getString(R.string.car_activity_message_deleted_car), Toast.LENGTH_LONG).show();
+                 Intent intent = new Intent(CarActivity.this, AllCarsActivity.class);
                  startActivity(intent);
              }
             }
@@ -173,7 +167,7 @@ public class CarActivity extends AppCompatActivity {
             }
         });
 
-        alertDialog = builder.create();
+        AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
@@ -181,11 +175,11 @@ public class CarActivity extends AppCompatActivity {
      * Methods for click edit car
      * Metoda dla klikniecie edytuj samochód
      *
-     * @param view
+     * @param view view
      */
     public void onEditCar(View view) {
         Intent intent = new Intent(this, EditCarActivity.class);
-        intent.putExtra("carId", carIdForShow);
+        intent.putExtra(getString(R.string.carIdIncommingIntent), carIdForShow);
         startActivity(intent);
     }
 
@@ -195,6 +189,10 @@ public class CarActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method creates two pleaces for show averages fuel consumption for each fuel type
+     * Metoda tworzy dwa miejsca dla średniego spalania dla każdego rodzaju paliwa
+     */
     private void showAverageConsumptionFuelInTwoPosition() {
 
         averageFuelConsumptionLinearLayout.removeAllViews();
@@ -214,6 +212,10 @@ public class CarActivity extends AppCompatActivity {
         averageFuelConsumptionLinearLayout.addView(linearLayoutForTwoPositionFuelConsumption);
     }
 
+    /**
+     * Method creates two pleaces for show averages fuel cost for each fuel type
+     * Metoda tworzy dwa miejsca dla średniego kosztu dla każdego rodzaju paliwa
+     */
     private void showAverageCostFuelInTwoPosition() {
         averageFuelCostLinearLayout.removeAllViews();
         imageButtonChangeShowDataForFuelCost.setOnClickListener(clickForChangeFuelCostDataForOnePositions);
@@ -232,6 +234,11 @@ public class CarActivity extends AppCompatActivity {
         averageFuelCostLinearLayout.addView(linearLayoutForTwoPositionFuelCost);
     }
 
+    /**
+     * Method creates LinearLayout with parameters for show data about average values
+     * Meotda tworzy sparametryzowana LinearLayout dla pokazania wartości średnich
+     * @return LinearLayout
+     */
     private LinearLayout getLinearLayoutToShowAverageValues() {
         LinearLayout resultLinearLayout = new LinearLayout(this);
         resultLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -246,14 +253,14 @@ public class CarActivity extends AppCompatActivity {
 
     private TextView getTextViewForAverageValue(String valueToShow) {
         TextView resultTextView = new TextView(this);
-        resultTextView.setGravity(Gravity.CENTER);
-        resultTextView.setLayoutParams(getLayoutParamsForTableRow(0,TableRow.LayoutParams.WRAP_CONTENT, 43));
-        if(valueToShow.equals(noDataMessage)){
-            resultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        }
-        else {
-            resultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-        }
+            resultTextView.setGravity(Gravity.CENTER);
+            resultTextView.setLayoutParams(getLayoutParamsForTableRow(0,TableRow.LayoutParams.WRAP_CONTENT, 43));
+            if(valueToShow.equals(noDataMessage)){
+                resultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            }
+            else {
+                resultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+            }
         resultTextView.setText(valueToShow);
         return resultTextView;
     }
@@ -262,7 +269,7 @@ public class CarActivity extends AppCompatActivity {
         TextView resultTextView = new TextView(this);
         resultTextView.setTextSize(10);
         resultTextView.setText(fuelType);
-        resultTextView.setGravity(Gravity.TOP | Gravity.RIGHT);
+        resultTextView.setGravity(Gravity.TOP | Gravity.END);
         resultTextView.setLayoutParams(getLayoutParamsForTableRow(0,TableRow.LayoutParams.MATCH_PARENT, 7));
         return  resultTextView;
     }
@@ -325,12 +332,17 @@ public class CarActivity extends AppCompatActivity {
     }
 
     private TextView createTextViewForShowOnePosition(String valueToShow) {
-        TextView result = new TextView(mContext);
+        TextView result = new TextView(this);
         result.setGravity(Gravity.CENTER);
         final float scale = this.getResources().getDisplayMetrics().density;
         int pixels3 = (int) (50 * scale + 0.5f);
         result.setWidth(pixels3);
-        result.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+        if(valueToShow.equals(noDataMessage)){
+            result.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        }
+        else {
+            result.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+        }
         result.setText(valueToShow);
         result.setLayoutParams(getLayoutParamsForTableRow(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 0));
         return result;

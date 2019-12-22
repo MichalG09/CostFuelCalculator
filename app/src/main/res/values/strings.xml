@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">CostFuel</string>
+    <string name="app_name_pl">Kalkulator spalania</string>
     <string name="titleMainActivity">WYBIERZ SAMOCHÓD</string>
     <string name="addCar">Dodaj samochód</string>
 
@@ -17,6 +18,7 @@
     <string name="titleAddCar">DODAJ SAMOCHÓD</string>
     <string name="titleAddFuel">DODAJ TANKOWANIE</string>
     <string name="titleEditCar">EDYTUJ SAMOCHÓD</string>
+    <string name="carIdIncommingIntent">CarId</string>
 
     <string-array name="period_time">
         <item>Okres wyliczania kosztów</item>
@@ -884,8 +886,60 @@
     <string name="no_data">Brak danych</string>
     <string name="error_data">Błędne dane</string>
     <string name="regex_for_split_fuel_types">\\+</string>
-    <string name="car_activity_message_to_confirm_delete_car">Na pewno chcesz usunąć samochód</string>
-    <string name="car_activity_message_deleted_car">Poprawnie usunięto samochód i tankowania !</string>
+    <string name="car_activity_message_to_confirm_delete_car">Na pewno chcesz usunąć samochód </string>
+    <string name="car_activity_message_deleted_car">Poprawnie usunięto samochód i tankowania dla tego samochodu!</string>
     <string name="activity_car_command_delete_car">USUŃ</string>
     <string name="car_activity_command_cancel">ANULUJ</string>
+    <string name="about_activity_author">Michał Grzech</string>
+    <string name="about_activity_website_link">http://www.mgrzech.pl</string>
+    <string name="about_activity_website">mgrzech.pl</string>
+    <string name="add_car_activity_choose_branch">Wybierz markę samochodu</string>
+    <string name="add_car_activity_chose_model">Wybierz model samochodu</string>
+    <string name="add_car_activity_chose_fuel_type">Wybierz typ paliwa samochodu</string>
+    <string name="add_car_activity_chose_period_time">Wybierz okres przeliczania kosztów</string>
+    <string name="add_car_activity_incorrect_branch">Niepoprawnie wprowadzona marka samochodu ! </string>
+    <string name="add_car_activity_incorrect_model">Niepoprawnie wprowadzony model samochodu ! </string>
+    <string name="add_car_activity_incorrect_type_fuel">Niepoprawnie wprowadzony rodzaj paliwa ! </string>
+    <string name="add_car_activity_incorrect_period">Niepoprawnie wprowadzony okres wyliczania kosztów ! </string>
+    <string name="add_car_activity_corrct_message">Poprawnie zapisano nowy samochód ! </string>
+    <string name="add_fuel_activity_incorrect_date">Data nie może być pusta ! </string>
+    <string name="add_fuel_activity_incorrect_cost_fuel">Koszt tankowania nie może być pusty ! </string>
+    <string name="add_fuel_activity_incorrect_quantity_fuel">Ilość paliwa nie może być pusta ! </string>
+    <string name="add_fuel_activity_incorrect_mileage">Przebieg nie może być pusty ! </string>
+    <string name="add_fuel_activity_correct_fuel">Poprawnie zapisano tankowanie ! </string>
+    <string name="add_fuel_activity_incorrect_mileage_too_high">Niepoprawny przebieg. Obecne tankowanie ma większy przebieg niż póżniejsze tankowania.</string>
+    <string name="add_fuel_activity_incorrect_mileage_too_low">Niepoprawny przebieg. Obecne tankowanie ma mniejszy przebieg niż wcześniejsze tankowania.</string>
+    <string name="add_fuel_activity_incorrect_mileage_doubled">Istnieje tankowanie z takim samym przebiegiem.</string>
+    <string name="edit_activity_incorrect_type_fuel">Niepoprawnie wprowadzony rodzaj paliwa !</string>
+    <string name="edit_activity_incorrect_period">Niepoprawnie wprowadzony okres wyliczania kosztów !</string>
+    <string name="edit_activity_title_error_message">UWAGA !</string>
+    <string name="edit_activity_deleted_warning">Zmiana rodzaju paliwa spowoduje usunięcie tankowań dla paliwa:</string>
+    <string name="edit_activity_confirm">POTWIERDŹ</string>
+    <string name="edit_activity_cancel">ANULUJ</string>
+    <string name="edit_activity_message_correct_save_edited_car">Poprawnie edytowano samochód !</string>
+    <string name="all_fuels_adapter_text_confirm_delete_fuel">Na pewno chcesz usunąć tankowanie ?</string>
+    <string name="all_fuels_adapter_confirm">OK</string>
+    <string name="all_fuels_adapter_cancel">ANULUJ</string>
+    <string name="all_fuels_adapter_error_during_delete">Błąd przy usuwaniu !</string>
+    <string name="all_fuels_adapter_correct_delete">Poprawnie usunięto tankowanie</string>
+    <string name="toolbar_instruction">Instrukcja</string>
+    <string name="toolbar_about_app">O Programie</string>
+    <string name="activity_car_edit_button">Button for start edit car activity</string>
+    <string name="car_activity_consumption">Spalanie:</string>
+    <string name="car_activity_change_position_fuel_position">button change show value for two position for each type fuel</string>
+    <string name="car_activity_unit_for_average_consumption">l/100km</string>
+    <string name="car_activity_cost">Koszt:</string>
+    <string name="car_activity_unit_for_average_cost">zł/100km</string>
+    <string name="about_activity_author_text">Autor:</string>
+    <string name="activity_add_fuel_date_hint">Data</string>
+    <string name="activity_add_fuel_unit_cost">ZŁ</string>
+    <string name="activity_add_fuel_unit_quantity">L</string>
+    <string name="activity_add_fuel_unit_mileage">KM</string>
+    <string name="activity_instruction_main_point">Ogólne</string>
+    <string name="button_to_expandable_point">Button to expandable point</string>
+    <string name="activity_instruction_add_car_point">Dodawanie auta</string>
+    <string name="activity_instruction_add_fuel_point">Dodawanie tankowania</string>
+    <string name="car_row_button_add_fuel">Button to add fuel from main avtivity</string>
+    <string name="fuel_row_button_delete_fuel">fuel_row_button_delete_fuel</string>
+    <string name="activity_all_fuels_no_fuels_to_show">Brak tankowań</string>
 </resources>

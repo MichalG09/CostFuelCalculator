@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 
 public class Fuel {
 
@@ -112,8 +113,8 @@ public class Fuel {
             public int compare(Fuel f1, Fuel f2) {
                 int result = 1;
                 try {
-                    Date date1 = new SimpleDateFormat("dd.MM.yyyy").parse(f1.getDate());
-                    Date date2 = new SimpleDateFormat("dd.MM.yyyy").parse(f2.getDate());
+                    Date date1 = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH).parse(f1.getDate());
+                    Date date2 = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH).parse(f2.getDate());
 
                     if(date1.before(date2)){
                         result = -1;

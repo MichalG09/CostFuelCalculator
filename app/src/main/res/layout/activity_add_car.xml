@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/normalBackground"
+    android:orientation="vertical"
     android:weightSum="100">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -24,20 +24,20 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="@string/titleAddCar"
-        android:textSize="25dp"
-        android:padding="5dp"
+        android:layout_weight="12"
         android:gravity="center"
-        android:layout_weight="12"/>
+        android:padding="5dp"
+        android:text="@string/titleAddCar"
+        android:textSize="25sp" />
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerBranchCar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:textAlignment="center"
-        app:hintText="@string/markCar"
         android:layout_margin="7dp"
-        android:layout_weight="10"/>
+        android:layout_weight="10"
+        android:textAlignment="center"
+        app:hintText="@string/markCar" />
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerModelCar"
@@ -46,25 +46,28 @@
         android:textAlignment="center"
         app:hintText="@string/modelCar"
         android:layout_margin="7dp"
-        android:layout_weight="10"/>
+        android:layout_weight="10"
+        android:visibility="invisible"/>
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerTypeFuelCar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:textAlignment="center"
-        app:hintText="@string/fuelType"
         android:layout_margin="7dp"
-        android:layout_weight="10"/>
+        android:layout_weight="10"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        app:hintText="@string/fuelType" />
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerPeriodTime"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:textAlignment="center"
-        app:hintText="@string/choose_period_time"
         android:layout_margin="7dp"
-        android:layout_weight="10"/>
+        android:layout_weight="10"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        app:hintText="@string/choose_period_time" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -77,11 +80,11 @@
         android:id="@+id/addNewCarButton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="@string/Save"
-        android:onClick="onSaveNewCar"
+        android:layout_margin="10dp"
         android:layout_weight="15"
         android:background="@color/colorForButton"
-        android:textSize="20dp"
-        android:layout_margin="10dp"/>
+        android:onClick="onSaveNewCar"
+        android:text="@string/Save"
+        android:textSize="20sp" />
 
 </LinearLayout>

@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Collections;
 import java.util.List;
 
 import pl.mgrzech.costfuel.R;
@@ -30,7 +29,6 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
     private AlertDialog alertDialog;
     private AlertDialog.Builder builder;
     private Fuel fuel;
-    private View mview;
 
     public ListAllFuelsAdapter(List<Fuel> listFuels, Context context) {
         mListFuels = listFuels;
@@ -40,7 +38,7 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
     @NonNull
     @Override
     public ListAllFuelsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        mview = LayoutInflater.from(parent.getContext()).inflate(R.layout.fuel_row, parent, false);
+        View mview = LayoutInflater.from(parent.getContext()).inflate(R.layout.fuel_row, parent, false);
 
         return new ListAllFuelsViewHolder(mview);
     }
@@ -50,7 +48,8 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
 
         fuel = mListFuels.get(position);
 
-        holder.dataFuel.setText(fuel.getDate() + " " + fuel.getFuelType() + "\n" + fuel.getCost() + "zł " + fuel.getQuantity() + "l " + fuel.getMileage() + "km");
+        String textForFuelForListAllFuels = fuel.getDate() + " " + fuel.getFuelType() + "\n" + fuel.getCost() + "zł " + fuel.getQuantity() + "l " + fuel.getMileage() + "km";
+        holder.dataFuel.setText(textForFuelForListAllFuels);
 
         holder.fuelRowDeleteFuel.setOnClickListener( new View.OnClickListener(){
             @Override
@@ -58,9 +57,9 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
 
                 fuel = mListFuels.get(position);
                 builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Na pewno chcesz usunąć tankowanie ?");
+                builder.setTitle(mContext.getString(R.string.all_fuels_adapter_text_confirm_delete_fuel));
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(mContext.getString(R.string.all_fuels_adapter_confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -74,15 +73,15 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
                             notifyDataSetChanged();
                             car = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, car);
                             carDatabase.updateCar(car);
-                            Toast.makeText(mContext, "Poprawnie usunięto tankowanie", Toast.LENGTH_LONG ).show();
+                            Toast.makeText(mContext, mContext.getString(R.string.all_fuels_adapter_correct_delete), Toast.LENGTH_LONG ).show();
                         }
                         else {
-                            Toast.makeText(mContext, "Błąd przy usuwaniu !", Toast.LENGTH_LONG ).show();
+                            Toast.makeText(mContext, mContext.getString(R.string.all_fuels_adapter_error_during_delete), Toast.LENGTH_LONG ).show();
                         }
                     }
                 });
 
-                builder.setNegativeButton("ANULUJ", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(mContext.getString(R.string.all_fuels_adapter_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -102,11 +101,10 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
 
     public class ListAllFuelsViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView dataFuel;
-        public LinearLayout fuelRowEditFuel;
-        public LinearLayout fuelRowDeleteFuel;
+        TextView dataFuel;
+        LinearLayout fuelRowDeleteFuel;
 
-        public ListAllFuelsViewHolder(@NonNull View itemView) {
+        ListAllFuelsViewHolder(@NonNull View itemView) {
             super(itemView);
             dataFuel = itemView.findViewById(R.id.fuelDataRow);
             fuelRowDeleteFuel = itemView.findViewById(R.id.fuelRowDeleteFuel);

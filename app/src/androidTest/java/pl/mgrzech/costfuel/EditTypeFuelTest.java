@@ -2,7 +2,6 @@ package pl.mgrzech.costfuel;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +10,6 @@ import org.junit.runners.MethodSorters;
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)

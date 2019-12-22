@@ -1,18 +1,13 @@
 package pl.mgrzech.costfuel.activities;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.QuickContactBadge;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -34,31 +29,23 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     private Spinner spinnerModelCar;
     private Spinner spinnerTypeFuel;
     private Spinner spinnerPeriodTIme;
-    private ArrayAdapter<CharSequence> adapter;
+    private CarDatabase carDatabase;
+    private Context mContext;
 
-    /**
-     * car datebase
-     */
-    private CarDatabase carDatabase = new CarDatabase(this);
-
-    /**
-     * Methods is called on create this activity. It created spinner with all mark cars.
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_car);
 
-        createSpinnerBranchCar();
-        spinnerModelCar = (Spinner) findViewById(R.id.spinnerModelCar);
-        spinnerModelCar.setVisibility(View.INVISIBLE);
-        spinnerTypeFuel = (Spinner) findViewById(R.id.spinnerTypeFuelCar);
-        spinnerTypeFuel.setVisibility(View.INVISIBLE);
-        spinnerPeriodTIme = (Spinner) findViewById(R.id.spinnerPeriodTime);
-        spinnerPeriodTIme.setVisibility(View.INVISIBLE);
+        mContext = this;
+        carDatabase = new CarDatabase(mContext);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        createSpinnerBranchCar();
+        spinnerModelCar = findViewById(R.id.spinnerModelCar);
+        spinnerTypeFuel = findViewById(R.id.spinnerTypeFuelCar);
+        spinnerPeriodTIme = findViewById(R.id.spinnerPeriodTime);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -69,71 +56,91 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     /**
      * The method checks which field has been completed and saved the entered value.
      * Metoda sprawdza, które pole zostało uzupełnione i zapisuje wprowadzoną wartość.
-     * @param parent
-     * @param view
-     * @param position
-     * @param id
+     * @param parent parent
+     * @param view view
+     * @param position position
+     * @param id id
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        if(parent.toString().contains("spinnerBranchCar")){
+        if(parent.toString().contains(spinnerBranchCar.getResources().getResourceEntryName(spinnerBranchCar.getId()))){
             brandAddingCar = parent.getItemAtPosition(position).toString();
-            changeBackgroundColor(spinnerBranchCar, R.color.background);
+            changeBackgroundColor(spinnerBranchCar);
             createSpinnerModelCar(parent);
         }
-        else if (parent.toString().contains("spinnerModelCar")){
+        else if (parent.toString().contains(spinnerModelCar.getResources().getResourceEntryName(spinnerModelCar.getId()))){
             modelsAddingCar = parent.getItemAtPosition(position).toString();
-            changeBackgroundColor(spinnerModelCar, R.color.background);
+            changeBackgroundColor(spinnerModelCar);
             if(typeFuelAddingCar.isEmpty()){
                 createSpinnerTypeFuel(parent);
             }
         }
-        else if (parent.toString().contains("spinnerTypeFuelCar")){
-            changeBackgroundColor(spinnerTypeFuel, R.color.background);
+        else if (parent.toString().contains(spinnerTypeFuel.getResources().getResourceEntryName(spinnerTypeFuel.getId()))){
+            changeBackgroundColor(spinnerTypeFuel);
             typeFuelAddingCar = parent.getItemAtPosition(position).toString();
             if(periodTimeAddingCar.isEmpty()){
                 createSpinnerPeriodTime(parent);
             }
         }
-        else if (parent.toString().contains("spinnerPeriodTime")){
-            changeBackgroundColor(spinnerPeriodTIme, R.color.background);
+        else if (parent.toString().contains(spinnerPeriodTIme.getResources().getResourceEntryName(spinnerPeriodTIme.getId()))){
+            changeBackgroundColor(spinnerPeriodTIme);
             periodTimeAddingCar = parent.getItemAtPosition(position).toString();
         }
     }
 
+    /**
+     * Methods creates a spinner with branch cars
+     * Metoda tworzy spinner z markami samochodów
+     */
     private void createSpinnerBranchCar() {
-        Toast.makeText(this, "Wybierz markę samochodu", Toast.LENGTH_SHORT).show();
-        spinnerBranchCar = (Spinner) findViewById(R.id.spinnerBranchCar);
+        Toast.makeText(mContext, getString(R.string.add_car_activity_choose_branch), Toast.LENGTH_SHORT).show();
+        spinnerBranchCar = findViewById(R.id.spinnerBranchCar);
         createSpinner(spinnerBranchCar, R.array.brands_cars);
     }
 
+    /**
+     * Methods creates a spinner with model cars
+     * Metoda tworzy spinner z modelami samochodów
+     */
     private void createSpinnerModelCar(AdapterView<?> parent) {
-        Toast.makeText(parent.getContext(), "Wybierz model samochodu", Toast.LENGTH_SHORT).show();
+        Toast.makeText(parent.getContext(), getString(R.string.add_car_activity_chose_model), Toast.LENGTH_SHORT).show();
 
         spinnerModelCar.setVisibility(View.VISIBLE);
         createSpinner(spinnerModelCar, getListModelCarForBrand(brandAddingCar));
         modelsAddingCar = "";
     }
 
+    /**
+     * Methods creates a spinner with type fuel cars
+     * Metoda tworzy spinner z rodzajem paliwa samochodów
+     */
     private void createSpinnerTypeFuel(AdapterView<?> parent) {
-        Toast.makeText(parent.getContext(), "Wybierz typ paliwa samochodu", Toast.LENGTH_SHORT).show();
+        Toast.makeText(parent.getContext(), getString(R.string.add_car_activity_chose_fuel_type), Toast.LENGTH_SHORT).show();
 
         spinnerTypeFuel.setVisibility(View.VISIBLE);
         createSpinner(spinnerTypeFuel, R.array.types_fuel);
         typeFuelAddingCar = "";
     }
 
+    /**
+     * Methods creates a spinner with period tima for calculation average values
+     * Metoda tworzy spinner z okresm czasu dla obliczeń średnich wartości
+     */
     private void createSpinnerPeriodTime(AdapterView<?> parent) {
-        Toast.makeText(parent.getContext(), "Wybierz okres przeliczania kosztów", Toast.LENGTH_SHORT).show();
+        Toast.makeText(parent.getContext(), getString(R.string.add_car_activity_chose_period_time), Toast.LENGTH_SHORT).show();
 
         spinnerPeriodTIme.setVisibility(View.VISIBLE);
         createSpinner(spinnerPeriodTIme, R.array.period_time);
         periodTimeAddingCar = "";
     }
 
+    /**
+     * Methods creates spinner with basic parameters
+     * @param spinner spinner to create
+     * @param textArray id array with data for spinner
+     */
     private void createSpinner(Spinner spinner, int textArray){
-        adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext,
                 textArray, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -145,42 +152,44 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     /**
-     * Method of saving a new car with data from layout add new car. It validated data and saved new car in database.
-     * Metoda zapisywania nowego samochodu z grafiki dodawania nowego samochodu. Sprawdze poprawność danych i zapisuje nowy samochód do bazy danych.
-     * @param view
+     * Method check data for a new car from layout add new car. If data is correct save new car in database or data is
+     * incorrect change spinner (witj incorrect data) background color to red.
+     * Meotda sprawdza poprawnośc danych z grafiki dodawania nowego samochodu. Jeżeli dane sa poprawne to zapisuje samochód w bazie danych lub jeżeli dane są
+     * niepoprawne to zmienia kolor spinnera (z błędnymi danymi) na czerwony
+     * @param view view
      */
     public void onSaveNewCar(View view) {
         String textErrorValidation = "";
         boolean correctValidation = true;
         if(brandAddingCar.isEmpty()){
-            textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzona marka samochodu ! \n";
+            textErrorValidation = textErrorValidation + getString(R.string.add_car_activity_incorrect_branch);
             correctValidation = false;
-            spinnerBranchCar.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
+            spinnerBranchCar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backdroundForValidationError));
         }
         if(modelsAddingCar.isEmpty() || modelsAddingCar.equals(getString(R.string.model_car_for_validate))){
-            textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony model samochodu ! \n";
+            textErrorValidation = textErrorValidation + getString(R.string.add_car_activity_incorrect_model);
             correctValidation = false;
-            spinnerModelCar.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
+            spinnerModelCar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backdroundForValidationError));
         }
         if (typeFuelAddingCar.isEmpty() || typeFuelAddingCar.equals(getString(R.string.fuel_type_for_validate))){
-            textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony rodzaj paliwa ! \n";
+            textErrorValidation = textErrorValidation + getString(R.string.add_car_activity_incorrect_type_fuel);
             correctValidation = false;
-            spinnerTypeFuel.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
+            spinnerTypeFuel.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backdroundForValidationError));
         }
         if (periodTimeAddingCar.isEmpty() || periodTimeAddingCar.equals(getString(R.string.choose_period_time))){
-            textErrorValidation = textErrorValidation + "Niepoprawnie wprowadzony okres wyliczania kosztów ! \n";
+            textErrorValidation = textErrorValidation + getString(R.string.add_car_activity_incorrect_period);
             correctValidation = false;
-            spinnerPeriodTIme.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
+            spinnerPeriodTIme.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backdroundForValidationError));
         }
 
         if(correctValidation) {
             carDatabase.addCar(new Car(brandAddingCar, modelsAddingCar, typeFuelAddingCar, periodTimeAddingCar));
-            Toast.makeText(this, "Poprawnie zapisano nowy samochód !", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, AllCarsActivity.class);
+            Toast.makeText(mContext, getString(R.string.add_car_activity_corrct_message), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(mContext, AllCarsActivity.class);
             startActivity(intent);
         }
         else{
-            Toast.makeText(this, textErrorValidation, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, textErrorValidation, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -190,120 +199,95 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         return super.onOptionsItemSelected(item);
     }
 
-    private void changeBackgroundColor(Spinner spinner, int color) {
-        spinner.setBackgroundColor(ContextCompat.getColor(AddCarActivity.this, color));
+    /**
+     * Methods change background color for basic spinner background color
+     * Metoda zmienia kolor spinnera na bazowy kolor
+     * @param spinner spinner for color change
+     *
+     */
+    private void changeBackgroundColor(Spinner spinner) {
+        spinner.setBackgroundColor(ContextCompat.getColor(AddCarActivity.this, R.color.normalBackground));
     }
 
     /**
-     * Method got a list all models car for mark car chosen in layout.
+     * Method got a list id all models car for mark car chosen in layout.
      * Meotda daje listę wszystkich modeli samochodów dla wybranej marki samochodu.
-     * @param selectedItem
-     * @return
+     * @param selectedItem name branch car
+     * @return id list with model cars for insert branch
      */
     private int getListModelCarForBrand(String selectedItem) {
-        if(selectedItem.equals("Alfa Romeo")){
-            return R.array.alfa_romeo_models;
+        switch (selectedItem) {
+            case "Alfa Romeo":
+                return R.array.alfa_romeo_models;
+            case "Audi":
+                return R.array.audi_models;
+            case "BMW":
+                return R.array.bmw_models;
+            case "Chevrolet":
+                return R.array.chevrolet_models;
+            case "Chrysler":
+                return R.array.chrysler_mocdels;
+            case "Citroen":
+                return R.array.citroen_mocdels;
+            case "Daewoo":
+                return R.array.daewoo_models;
+            case "Dodge":
+                return R.array.dodge_mocels;
+            case "Dacia":
+                return R.array.dacia_models;
+            case "Ford":
+                return R.array.ford_models;
+            case "Fiat":
+                return R.array.fiat_models;
+            case "Honda":
+                return R.array.honda_models;
+            case "Hyundai":
+                return R.array.hyundai_models;
+            case "Jeep":
+                return R.array.jeep_models;
+            case "Kia":
+                return R.array.kia_models;
+            case "Land Rover":
+                return R.array.land_rover_models;
+            case "Mazda":
+                return R.array.mazda_models;
+            case "Mercedes":
+                return R.array.mercedes_models;
+            case "Mini":
+                return R.array.mini_models;
+            case "Mitsubishi":
+                return R.array.mitsubishi_models;
+            case "Nissan":
+                return R.array.nissan_models;
+            case "Opel":
+                return R.array.opel_models;
+            case "Peugeot":
+                return R.array.peugeot_models;
+            case "Renault":
+                return R.array.renault_models;
+            case "Rover":
+                return R.array.rover_models;
+            case "Saab":
+                return R.array.saab_models;
+            case "Seat":
+                return R.array.seat_models;
+            case "Skoda":
+                return R.array.skoda_models;
+            case "Smart":
+                return R.array.smart_models;
+            case "Subaru":
+                return R.array.subaru_models;
+            case "Suzuki":
+                return R.array.suzuki_models;
+            case "Toyota":
+                return R.array.toyota_models;
+            case "Volkswagen":
+                return R.array.volkswagen_models;
+            case "Volvo":
+                return R.array.volvo_models;
+            default:
+                return R.array.empty_array;
         }
-        else if (selectedItem.equals("Audi")){
-            return R.array.audi_models;
-        }
-        else if (selectedItem.equals("BMW")){
-            return R.array.bmw_models;
-        }
-        else if (selectedItem.equals("Chevrolet")){
-            return R.array.chevrolet_models;
-        }
-        else if (selectedItem.equals("Chrysler")){
-            return R.array.chrysler_mocdels;
-        }
-        else if (selectedItem.equals("Citroen")){
-            return R.array.citroen_mocdels;
-        }
-        else if (selectedItem.equals("Daewoo")){
-            return R.array.daewoo_models;
-        }
-        else if (selectedItem.equals("Dodge")){
-            return R.array.dodge_mocels;
-        }
-        else if (selectedItem.equals("Dacia")){
-            return R.array.dacia_models;
-        }
-        else if (selectedItem.equals("Ford")){
-            return R.array.ford_models;
-        }
-        else if (selectedItem.equals("Fiat")){
-            return R.array.fiat_models;
-        }
-        else if (selectedItem.equals("Honda")){
-            return R.array.honda_models;
-        }
-        else if (selectedItem.equals("Hyundai")){
-            return R.array.hyundai_models;
-        }
-        else if (selectedItem.equals("Jeep")){
-            return R.array.jeep_models;
-        }
-        else if (selectedItem.equals("Kia")){
-            return R.array.kia_models;
-        }
-        else if (selectedItem.equals("Land Rover")){
-            return R.array.land_rover_models;
-        }
-        else if (selectedItem.equals("Mazda")){
-            return R.array.mazda_models;
-        }
-        else if (selectedItem.equals("Mercedes")){
-            return R.array.mercedes_models;
-        }
-        else if (selectedItem.equals("Mini")){
-            return R.array.mini_models;
-        }
-        else if (selectedItem.equals("Mitsubishi")){
-            return R.array.mitsubishi_models;
-        }
-        else if (selectedItem.equals("Nissan")){
-            return R.array.nissan_models;
-        }
-        else if (selectedItem.equals("Opel")){
-            return R.array.opel_models;
-        }
-        else if (selectedItem.equals("Peugeot")){
-            return R.array.peugeot_models;
-        }
-        else if (selectedItem.equals("Renault")){
-            return R.array.renault_models;
-        }
-        else if (selectedItem.equals("Rover")){
-            return R.array.rover_models;
-        }
-        else if (selectedItem.equals("Saab")){
-            return R.array.saab_models;
-        }
-        else if (selectedItem.equals("Seat")){
-            return R.array.seat_models;
-        }
-        else if (selectedItem.equals("Skoda")){
-            return R.array.skoda_models;
-        }
-        else if (selectedItem.equals("Smart")){
-            return R.array.smart_models;
-        }
-        else if (selectedItem.equals("Subaru")){
-            return R.array.subaru_models;
-        }
-        else if (selectedItem.equals("Suzuki")){
-            return R.array.suzuki_models;
-        }
-        else if (selectedItem.equals("Toyota")){
-            return R.array.toyota_models;
-        }
-        else if (selectedItem.equals("Volkswagen")){
-            return R.array.volkswagen_models;
-        }
-        else if (selectedItem.equals("Volvo")){
-            return R.array.volvo_models;
-        }
-        return R.array.empty_array;
     }
 
 }

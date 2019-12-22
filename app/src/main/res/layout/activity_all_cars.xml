@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/normalBackground"
+    android:orientation="vertical"
     android:weightSum="100">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -23,39 +23,38 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="@string/titleMainActivity"
-        android:textSize="25dp"
-        android:padding="5dp"
+        android:layout_weight="10"
         android:gravity="center"
-        android:layout_weight="10"/>
+        android:padding="5dp"
+        android:text="@string/titleMainActivity"
+        android:textSize="25sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragmentListAllCars"
         android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="65"
-        android:gravity="center"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:gravity="center">
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:text="Wyczyść baze"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="10dp"
         android:layout_weight="10"
-        android:textSize="20dp"
-        android:layout_margin="10dp"
         android:background="@color/colorForButton"
-        android:onClick="clearDatabase"/>
+        android:onClick="clearDatabase"
+        android:text="Wyczyść baze"
+        android:textSize="20dp" />
     <Button
-        android:text="@string/addCar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="15"
-        android:textSize="20dp"
         android:layout_margin="10dp"
+        android:layout_weight="15"
         android:background="@color/colorForButton"
-        android:onClick="onAddNewCar"/>
+        android:onClick="onAddNewCar"
+        android:text="@string/addCar"
+        android:textSize="20sp" />
 
 </LinearLayout>

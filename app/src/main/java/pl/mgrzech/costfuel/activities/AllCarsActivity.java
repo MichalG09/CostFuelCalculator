@@ -24,16 +24,6 @@ import pl.mgrzech.costfuel.models.Fuel;
 
 public class AllCarsActivity extends AppCompatActivity {
 
-    /**
-     * List all car from datebase.
-     */
-    private List<Car> listCar;
-
-    /**
-     * Methods is called on create this activity. It created recyclerView with all seaved car (got from datebase).
-     * Metoda jest wywoływana podczas tworzeni tej aktywności. Tworzony jest recyclerView ze wszystkimi zapisanymi samochodami (z bazy).
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,17 +32,13 @@ public class AllCarsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.fragmentListAllCars);
+        RecyclerView recyclerView = findViewById(R.id.fragmentListAllCars);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         CarDatabase carDatabase = new CarDatabase(this);
-        FuelDatabase fuelDatabase = new FuelDatabase(this);
-
-//        fuelDatabase.calcFuelsDatabase();
-        listCar = carDatabase.getAllCars();
-
+        List<Car> listCar = carDatabase.getAllCars();
         recyclerView.setAdapter(new ListAllCarAdapter(listCar, this));
     }
 
@@ -81,7 +67,7 @@ public class AllCarsActivity extends AppCompatActivity {
     }
 
     /**
-     * Method is called after use button "add new car" from main layout with all saved car.
+     * Method for button "add new car" from main layout with all saved car.
      * Metoda dla przycisku "dodaj nowy samochód" dla głownego widoku ze wszystkimi zapisnymi samochodami.
      * @param view
      */

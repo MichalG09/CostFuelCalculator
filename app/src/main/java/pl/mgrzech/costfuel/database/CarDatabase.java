@@ -52,7 +52,7 @@ public class CarDatabase extends SQLiteOpenHelper {
     /**
      * Method saves car in database.
      * Metoda zapisuje samochód w bazie danych.
-     * @param car
+     * @param car car for add to database
      */
     public void addCar(Car car){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -73,8 +73,8 @@ public class CarDatabase extends SQLiteOpenHelper {
     /**
      * Method returns car searched by Id from database.
      * Metoda zwraca samochód wyszukany przez Id z bazy danych.
-     * @param id
-     * @return
+     * @param id car id for search in database
+     * @return car
      */
     public Car getCarById(int id){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -97,7 +97,7 @@ public class CarDatabase extends SQLiteOpenHelper {
     /**
      * Method returns all car from database.
      * Metoda zwraca wszystkie samochody z bazy danych.
-     * @return
+     * @return list all car from database
      */
     public List<Car> getAllCars(){
         List<Car> result = new ArrayList<>();
@@ -131,8 +131,8 @@ public class CarDatabase extends SQLiteOpenHelper {
     /**
      * Method updates car by Id in database.
      * Metoda aktualizuje samochód o danym Id w bazie danych.
-     * @param car
-     * @return
+     * @param car updated car for save in database
+     * @return if correct save return 1
      */
     public int updateCar(Car car){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -154,8 +154,8 @@ public class CarDatabase extends SQLiteOpenHelper {
     /**
      * Methods deletes car by Id in database.
      * Meotda kasuje samochód o danym Id w bazie danych.
-     * @param car
-     * @return
+     * @param car car for delete
+     * @return if correct save return 1
      */
     public int deleteCar(Car car){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -175,10 +175,10 @@ public class CarDatabase extends SQLiteOpenHelper {
     /**
      * Method returns car searched by Mark from database. Used only in test.
      * Metoda zwraca samochód wyszukany przez model z bazy danych. Uzyte tylko przy testach.
-     * @param mark
-     * @return
+     * @param mark mark of searching car
+     * @return car
      */
-    public Car getCarByName(String mark){
+    public Car getCarByMark(String mark){
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.query(TABLE_CARS, new String[]{KEY_ID, KEY_MARK, KEY_MODEL, KEY_FUEL_CONSUMPTION_FIRST, KEY_COST_FIRST, KEY_FUEL_CONSUMPTION_SECOND, KEY_COST_SECOND, KEY_FUEL_TYPE, KEY_PERIOD_CALC},

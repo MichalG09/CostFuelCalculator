@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import pl.mgrzech.costfuel.models.Fuel;
 
@@ -52,8 +53,8 @@ public class FuelDatabase extends SQLiteOpenHelper {
     /**
      * Method saves fuel in database.
      * Metoda zapisuje tankowanie w bazie danych.
-     * @param fuel
-     * @param carID
+     * @param fuel fuel for add to database
+     * @param carID car id for fuel is add
      */
     public void addFuel(Fuel fuel, String carID){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -70,32 +71,10 @@ public class FuelDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     * Method returns fuel searched by Id from database.
-     * Metoda zwraca tankowanie wyszukany przez Id z bazy danych.
-     * @param id
-     * @return
-     */
-    public Fuel getFuelById(int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.query(TABLE_FUELS, new String[]{KEY_ID, KEY_FUEL_TYPE, KEY_DATE, KEY_COST, KEY_QUANTITY, KEY_MILEAGE, KEY_CAR_ID}, KEY_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
-
-        if(cursor != null){
-            cursor.moveToFirst();
-        }
-
-        Fuel fuel = new Fuel(Integer.parseInt(cursor.getString(0)), cursor.getString(1),
-            cursor.getString(2), Double.parseDouble(cursor.getString(3)),
-            Double.parseDouble(cursor.getString(4)), Integer.parseInt(cursor.getString(5)));
-        return fuel;
-    }
-
-    /**
      * Methods return all fuels for one car.
      * Metoda zwraca wszystkie tankowania dla danego samochodu.
-     * @param carId
-     * @return
+     * @param carId car ID
+     * @return list all fuels for insert car Id
      */
     public List<Fuel> getAllFuelsForCarId(String carId){
         List<Fuel> result = new ArrayList<>();
@@ -123,6 +102,7 @@ public class FuelDatabase extends SQLiteOpenHelper {
 
         }
         catch (Exception e){
+            e.printStackTrace();
         }
 
         return result;
@@ -131,8 +111,8 @@ public class FuelDatabase extends SQLiteOpenHelper {
     /**
      * Methods return all fuels with correct data for calculation for one car.
      * Metoda zwraca wszystkie tankowania z poprawną datą do przeliczeń dla danego samochodu.
-     * @param carId
-     * @return
+     * @param carId car Id
+     * @return list fuel for insert car Id make in insert period time
      */
     public List<Fuel> getAllFuelsForCarIdInCalculationPeriod(String carId, int period) throws ParseException {
         List<Fuel> listAllFuels = getAllFuelsForCarId(carId);
@@ -140,7 +120,7 @@ public class FuelDatabase extends SQLiteOpenHelper {
 
         if(period != 0){
             Date now = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
             Date fuelDate;
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.MONTH, (period * -1));
@@ -159,30 +139,10 @@ public class FuelDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     * Method updates fuel by Id in database.
-     * Metoda aktualizuje tankowanie o danym Id w bazie danych.
-     * @param fuel
-     * @return
-     */
-    public int updateFuel(Fuel fuel){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_FUEL_TYPE, fuel.getFuelType());
-        contentValues.put(KEY_DATE, fuel.getDate());
-        contentValues.put(KEY_COST, String.valueOf(fuel.getCost()));
-        contentValues.put(KEY_QUANTITY, String.valueOf(fuel.getQuantity()));
-        contentValues.put(KEY_MILEAGE, String.valueOf(fuel.getMileage()));
-
-        return db.update(TABLE_FUELS, contentValues, KEY_ID + "=?",
-                new String[]{String.valueOf(fuel.getId())} );
-    }
-
-    /**
      * Methods deletes fuel by Id in database.
      * Meotda kasuje tankowanie o danym Id w bazie danych.
-     * @param fuel
-     * @return
+     * @param fuel fuel for delete
+     * @return if correct save return 1
      */
     public int deleteFuel(Fuel fuel){
         SQLiteDatabase db = getWritableDatabase();
@@ -202,9 +162,9 @@ public class FuelDatabase extends SQLiteOpenHelper {
     /**
      * Methods return number fuels for input type fuels
      * Metoda zwraca ilość tankowań konkrtnego rodzaju paliwa
-     * @param carId
-     * @param typeFuel
-     * @return
+     * @param carId carId
+     * @param typeFuel type fuel
+     * @return number of fuel (one fuel type) for insert car Id
      */
     public int calcNumberFuelsForTypeFuel(int carId, String typeFuel) {
         int result = 0;
@@ -220,29 +180,10 @@ public class FuelDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     * Methods return a number types of fuel for car
-     * Metoda zwraca ilość rodzajów paliw dla samochodu
-     * @param carId
-     * @return
-     */
-    public int calcTypesFuelForCarInDatabase(int carId){
-        int result = 0;
-        String sql = "SELECT count(DISTINCT " + KEY_FUEL_TYPE + ") FROM " + TABLE_FUELS + " WHERE " + KEY_CAR_ID + "= ?";
-        Cursor cursor = getReadableDatabase().rawQuery(sql, new String[] {String.valueOf(carId)});
-
-        if(cursor.getCount() > 0){
-            cursor.moveToFirst();
-            result = cursor.getInt(0);
-        }
-
-        return result;
-    }
-
-    /**
      * Method return car id for input fuel
      * Meotda zwraca car id dla danego tankowania
-     * @param fuelId
-     * @return
+     * @param fuelId fuel ID
+     * @return car Id for insert fuel Id
      */
     public String getCarIdForFuels(String fuelId){
         String carId = "";
@@ -261,31 +202,29 @@ public class FuelDatabase extends SQLiteOpenHelper {
     /**
      * Methods delete all fuels for one car in database.
      * Meotda kasuje wszystkie tankowania dla danego samochoduw bazie danych.
-     * @param carId
-     * @return
+     * @param carId car ID
      */
-    public int deleteFuelsForCar(int carId) {
+    public void deleteFuelsForCar(int carId) {
         SQLiteDatabase db = getWritableDatabase();
-        return db.delete(TABLE_FUELS, KEY_CAR_ID + "=?", new String[]{String.valueOf(carId)});
+        db.delete(TABLE_FUELS, KEY_CAR_ID + "=?", new String[]{String.valueOf(carId)});
     }
 
     /**
      * Methods delete all one type fuels for one car in database.
      * Meotda kasuje wszystkie tankowania jednego rodzaju paliwa dla danego samochodu w bazie danych.
-     * @param carId
-     * @return
+     * @param carId CarId
      */
-    public int deleteOneTypeFuelsForCar(int carId, String fuelType) {
+    public void  deleteOneTypeFuelsForCar(int carId, String fuelType) {
         SQLiteDatabase db = getWritableDatabase();
-        return db.delete(TABLE_FUELS, KEY_CAR_ID + "=? AND " + KEY_FUEL_TYPE + "=?", new String[]{String.valueOf(carId), fuelType});
+        db.delete(TABLE_FUELS, KEY_CAR_ID + "=? AND " + KEY_FUEL_TYPE + "=?", new String[]{String.valueOf(carId), fuelType});
     }
 
     /**
      * Method returns fuel searched by date and carId from database. Used only in test
      * Metoda zwraca tankowanie wyszukany przez date i carId z bazy danych. Używane tylko przy testach.
-     * @param date
-     * @param carId
-     * @return
+     * @param date date
+     * @param carId carId
+     * @return Fuel for insert CarId and insert date
      */
     public Fuel getFuelByDateAndCarId(String date, int carId) {
 
@@ -302,42 +241,5 @@ public class FuelDatabase extends SQLiteOpenHelper {
                 cursor.getString(2), Double.parseDouble(cursor.getString(3)),
                 Double.parseDouble(cursor.getString(4)), Integer.parseInt(cursor.getString(5)));
         return fuel;
-    }
-
-    /**
-     * Methods return a number fuels for car
-     * Metoda zwraca ilość tankowań dla samochodu
-     * @param carId
-     * @return
-     */
-    public int calcFuelsForCarInDatabase(int carId){
-        int result = 0;
-        String sql = "SELECT count(*) FROM " + TABLE_FUELS + " WHERE " + KEY_CAR_ID + "= ?";
-        Cursor cursor = getReadableDatabase().rawQuery(sql, new String[] {String.valueOf(carId)});
-
-        if(cursor.getCount() > 0){
-            cursor.moveToFirst();
-            result = cursor.getInt(0);
-        }
-
-        return result;
-    }
-
-    /**
-     * Methods return a number fuels in datebase
-     * Metoda zwraca ilość tankowań w bazie danych
-     * @return
-     */
-    public int calcFuelsDatabase(){
-        int result = 0;
-        String sql = "SELECT count(*) FROM " + TABLE_FUELS;
-        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
-
-        if(cursor.getCount() > 0){
-            cursor.moveToFirst();
-            result = cursor.getInt(0);
-        }
-
-        return result;
     }
 }

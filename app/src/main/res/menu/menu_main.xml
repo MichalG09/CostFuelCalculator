@@ -6,12 +6,12 @@
     <item
         android:id="@+id/menu_instruction"
         android:orderInCategory="100"
-        android:title="Instruckja"
+        android:title="@string/toolbar_instruction"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_about"
         android:orderInCategory="100"
-        android:title="O Programie"
+        android:title="@string/toolbar_about_app"
         app:showAsAction="never" />
 </menu>

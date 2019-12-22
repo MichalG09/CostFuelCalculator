@@ -1,9 +1,6 @@
 package pl.mgrzech.costfuel.activities;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -13,14 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.Calendar;
-
 import pl.mgrzech.costfuel.BuildConfig;
 import pl.mgrzech.costfuel.R;
 
 public class AboutActivity extends AppCompatActivity {
 
-    private TextView modeversionProgram;
+    private TextView versionProgram;
     private TextView nameProgram;
     private TextView author;
     private TextView website;
@@ -40,21 +35,21 @@ public class AboutActivity extends AppCompatActivity {
         String versionName = BuildConfig.VERSION_NAME;
 
         nameProgram = findViewById(R.id.aboutNameProgram);
-        nameProgram.setText("Kalkulator spalania");
+        nameProgram.setText(getResources().getString(R.string.app_name_pl));
 
-        modeversionProgram = findViewById(R.id.aboutVersionProgram);
-        modeversionProgram.setText("ver. " + versionName);
+        versionProgram = findViewById(R.id.aboutVersionProgram);
+        versionProgram.setText("ver. " + versionName);
 
         author = findViewById(R.id.aboutAuthor);
-        author.setText("Michał Grzech");
+        author.setText(getResources().getString(R.string.about_activity_author));
 
         website = findViewById(R.id.aboutWebsite);
-        website.setText("mgrzech.pl");
+        website.setText(getResources().getString(R.string.about_activity_website));
 
         website.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.mgrzech.pl"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.about_activity_website_link)));
                 startActivity(browserIntent);
             }
         });

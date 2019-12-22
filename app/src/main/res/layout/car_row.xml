@@ -12,9 +12,9 @@
     card_view:cardElevation="5dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -26,9 +26,9 @@
                 android:id="@+id/carRow"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:layout_weight="20"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/carName"
@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -50,9 +50,10 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/add_button"
-                    android:background="@drawable/left_border"
-                    android:padding="5dp"/>
+                    android:background="@drawable/white_border"
+                    android:contentDescription="@string/car_row_button_add_fuel"
+                    android:padding="5dp"
+                    android:src="@drawable/add_button" />
 
             </LinearLayout>
         </LinearLayout>

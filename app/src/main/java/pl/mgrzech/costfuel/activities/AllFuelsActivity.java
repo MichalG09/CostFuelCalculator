@@ -1,7 +1,14 @@
 package pl.mgrzech.costfuel.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,30 +27,36 @@ import pl.mgrzech.costfuel.models.Fuel;
 public class AllFuelsActivity extends AppCompatActivity{
 
     private int carId;
-    private FuelDatabase fuelDatabase = new FuelDatabase(this);
-    private List<Fuel> listFuels;
-    private RecyclerView recyclerView;
 
-    /**
-     * Methods is called on create this activity. It created recyclerView with all saved fuel for car.
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_fuels);
         getIncomingIntent();
 
-        recyclerView = (RecyclerView) findViewById(R.id.fragmentListAllFuels);
+        RecyclerView recyclerView = findViewById(R.id.fragmentListAllFuels);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        listFuels = fuelDatabase.getAllFuelsForCarId(String.valueOf(carId));
-        Collections.sort(listFuels, Fuel.Comparators.SORT_BY_DATE);
-        recyclerView.setAdapter(new ListAllFuelsAdapter(listFuels, this));
+        FuelDatabase fuelDatabase = new FuelDatabase(this);
+        List<Fuel> listFuels = fuelDatabase.getAllFuelsForCarId(String.valueOf(carId));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if(!listFuels.isEmpty()){
+            Collections.sort(listFuels, Fuel.Comparators.SORT_BY_DATE);
+            recyclerView.setAdapter(new ListAllFuelsAdapter(listFuels, this));
+        }
+        else{
+            LinearLayout linearLayout = findViewById(R.id.allFuelsLinearLayout);
+            TextView textView = new TextView(this);
+            textView.setText(getResources().getString(R.string.activity_all_fuels_no_fuels_to_show));
+            linearLayout.addView(textView);
+            textView.setGravity(Gravity.CENTER | Gravity.TOP);
+            textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        }
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -52,18 +65,20 @@ public class AllFuelsActivity extends AppCompatActivity{
     }
 
     /**
-     * The method got the Id of the car for all fuels was showed
+     * The method got the Id of the car for all fuels will show
      * Meotda pobiera id samochodu, dla którego wyświetla wszystkie tankowania.
      */
     private void getIncomingIntent(){
-        if(getIntent().hasExtra("carId")){
-            carId = getIntent().getIntExtra("carId",0);
+        if(getIntent().hasExtra(getString(R.string.carIdIncommingIntent))){
+            carId = getIntent().getIntExtra(getString(R.string.carIdIncommingIntent),0);
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        this.finish();
-        return super.onOptionsItemSelected(item);
+        Intent intent = new Intent(this, CarActivity.class);
+        intent.putExtra(getString(R.string.carIdIncommingIntent), carId);
+        startActivity(intent);
+        return true;
     }
 }

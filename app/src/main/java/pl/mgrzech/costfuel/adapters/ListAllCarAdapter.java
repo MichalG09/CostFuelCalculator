@@ -41,14 +41,15 @@ public class ListAllCarAdapter extends RecyclerView.Adapter<ListAllCarAdapter.Li
 
         Car car = mListCar.get(position);
 
-        holder.carName.setText(car.getMark() + " " + car.getModel());
+        String carForPositionInList = car.getMark() + " " + car.getModel();
+        holder.carName.setText(carForPositionInList);
 
         holder.carRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent intent = new Intent(mContext, CarActivity.class);
-                intent.putExtra("carId", mListCar.get(position).getId());
+                intent.putExtra(mContext.getString(R.string.carIdIncommingIntent), mListCar.get(position).getId());
                 mContext.startActivity(intent);
             }
         });
@@ -58,7 +59,7 @@ public class ListAllCarAdapter extends RecyclerView.Adapter<ListAllCarAdapter.Li
             public void onClick(View view) {
 
                 Intent intent = new Intent(mContext, AddFuelActivity.class);
-                intent.putExtra("carId", mListCar.get(position).getId());
+                intent.putExtra(mContext.getString(R.string.carIdIncommingIntent), mListCar.get(position).getId());
                 mContext.startActivity(intent);
             }
         });
@@ -71,11 +72,11 @@ public class ListAllCarAdapter extends RecyclerView.Adapter<ListAllCarAdapter.Li
 
     public class ListAllCarViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView carName;
-        public LinearLayout carRow;
-        public LinearLayout carRowAddFuel;
+        TextView carName;
+        LinearLayout carRow;
+        LinearLayout carRowAddFuel;
 
-        public ListAllCarViewHolder(@NonNull View itemView) {
+        private ListAllCarViewHolder(@NonNull View itemView) {
             super(itemView);
             carName = itemView.findViewById(R.id.carName);
             carRow = itemView.findViewById(R.id.carRow);

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/allFuelsLinearLayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/normalBackground"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -21,11 +24,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragmentListAllFuels"
         android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="9"
-        android:gravity="center"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:gravity="center">
     </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
