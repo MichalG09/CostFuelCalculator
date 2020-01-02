@@ -21,7 +21,7 @@ import java.util.List;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.adapters.ListAllFuelsAdapter;
-import pl.mgrzech.costfuel.database.FuelDatabase;
+import pl.mgrzech.costfuel.database.Database;
 import pl.mgrzech.costfuel.models.Fuel;
 
 public class AllFuelsActivity extends AppCompatActivity{
@@ -39,8 +39,8 @@ public class AllFuelsActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        FuelDatabase fuelDatabase = new FuelDatabase(this);
-        List<Fuel> listFuels = fuelDatabase.getAllFuelsForCarId(String.valueOf(carId));
+        Database database = new Database(this);
+        List<Fuel> listFuels = database.getAllFuelsForCarId(String.valueOf(carId));
 
         if(!listFuels.isEmpty()){
             Collections.sort(listFuels, Fuel.Comparators.SORT_BY_DATE);

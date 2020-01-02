@@ -48,8 +48,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="85"
-                    android:gravity="center"
-                    android:textSize="30sp" />
+                    android:gravity="center"/>
 
                 <ImageButton
                     android:layout_width="0dp"
@@ -76,8 +75,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="85"
-                    android:gravity="center"
-                    android:textSize="30sp" />
+                    android:gravity="center"/>
 
                 <ImageButton
                     android:layout_width="0dp"
@@ -104,8 +102,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="85"
-                    android:gravity="center"
-                    android:textSize="12sp" />
+                    android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>
 

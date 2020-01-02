@@ -21,13 +21,9 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 
 import pl.mgrzech.costfuel.R;
-import pl.mgrzech.costfuel.database.CarDatabase;
-import pl.mgrzech.costfuel.database.FuelDatabase;
+import pl.mgrzech.costfuel.database.Database;
 import pl.mgrzech.costfuel.models.Car;
 
-/**
- * Start Activity
- */
 public class CarActivity extends AppCompatActivity {
 
     private int carIdForShow;
@@ -35,8 +31,7 @@ public class CarActivity extends AppCompatActivity {
     private String averageFuelConsumptionForSecondFuel;
     private String averageFuelCostForFirstFuel;
     private String averageFuelCostForSecondFuel;
-    private CarDatabase carDatabase;
-    private FuelDatabase fuelDatabase;
+    private Database database;
     private Car car;
     private DecimalFormat decimalFormat = new DecimalFormat("##0.00");
     private String noDataMessage;
@@ -58,17 +53,20 @@ public class CarActivity extends AppCompatActivity {
         noDataMessage = getResources().getString(R.string.no_data);
         errorDataMessage = getResources().getString(R.string.error_data);
 
-        carDatabase = new CarDatabase(this);
-        car = carDatabase.getCarById(carIdForShow);
+        database = new Database(this);
+        car = database.getCarById(carIdForShow);
 
         TextView carMarkInfo = findViewById(R.id.carActivityCarMark);
         carMarkInfo.setText(car.getMark());
+        carMarkInfo.setTextSize(20 * getResources().getDisplayMetrics().density);
 
         TextView carModelInfo = findViewById(R.id.carActivityCarModel);
         carModelInfo.setText(car.getModel());
+        carModelInfo.setTextSize(20 * getResources().getDisplayMetrics().density);
 
         TextView carTypeFuelInfo = findViewById(R.id.carActivityCarFuelType);
         carTypeFuelInfo.setText(car.getFuelType());
+        carTypeFuelInfo.setTextSize(10 * getResources().getDisplayMetrics().density);
 
         averageFuelConsumptionLinearLayout = findViewById(R.id.averangeFuelConsumptionLayout);
         averageFuelCostLinearLayout = findViewById(R.id.averangeFuelCostLayout);
@@ -149,10 +147,10 @@ public class CarActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-             fuelDatabase = new FuelDatabase(CarActivity.this);
-             fuelDatabase.deleteFuelsForCar(car.getId());
+             database = new Database(CarActivity.this);
+             database.deleteFuelsForCar(car.getId());
 
-             if(carDatabase.deleteCar(car) > 0){
+             if(database.deleteCar(car) > 0){
                  Toast.makeText(CarActivity.this, getResources().getString(R.string.car_activity_message_deleted_car), Toast.LENGTH_LONG).show();
                  Intent intent = new Intent(CarActivity.this, AllCarsActivity.class);
                  startActivity(intent);
@@ -241,6 +239,7 @@ public class CarActivity extends AppCompatActivity {
      */
     private LinearLayout getLinearLayoutToShowAverageValues() {
         LinearLayout resultLinearLayout = new LinearLayout(this);
+        resultLinearLayout.setGravity(Gravity.CENTER);
         resultLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         resultLinearLayout.setWeightSum(100);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(

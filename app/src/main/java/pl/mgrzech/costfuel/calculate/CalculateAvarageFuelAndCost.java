@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 
-import pl.mgrzech.costfuel.database.FuelDatabase;
+import pl.mgrzech.costfuel.database.Database;
 import pl.mgrzech.costfuel.models.Car;
 import pl.mgrzech.costfuel.models.Fuel;
 
@@ -14,17 +14,17 @@ public class CalculateAvarageFuelAndCost {
      * Method calculate average cost and average fuel consumption for car per 100 km.
      * Method checks number type fuel for car and select corrects algorithm to calculate.
      * Moetoda przelicza koszt i spalanie samochodu na 100 km
-     * @param fuelDatabase
+     * @param database
      * @param car
      * @return Car with new average values
      */
-    public static Car recarkulate(FuelDatabase fuelDatabase, Car car) {
+    public static Car recarkulate(Database database, Car car) {
 
         if (car.getFuelType().contains("+")){
-            return calcForTwoTypeFuel(car, fuelDatabase);
+            return calcForTwoTypeFuel(car, database);
         }
         else {
-            return calcForOneTypeFuel(car, fuelDatabase);
+            return calcForOneTypeFuel(car, database);
         }
     }
 
@@ -34,7 +34,7 @@ public class CalculateAvarageFuelAndCost {
      * @param fuelDatabase
      * @return
      */
-    private static Car calcForTwoTypeFuel(Car car, FuelDatabase fuelDatabase) {
+    private static Car calcForTwoTypeFuel(Car car, Database fuelDatabase) {
         double sumCostFuels = 0;
         double sumQuantityFuels = 0;
         double avarageCost = 0;
@@ -50,14 +50,15 @@ public class CalculateAvarageFuelAndCost {
         String[] typesFuel = car.getFuelType().split("\\+");
         String typeFirstFuel = typesFuel[0].trim();
         String typeSecondFuel = typesFuel[1].trim();
-        boolean canCalcForFirstFuel = fuelDatabase.calcNumberFuelsForTypeFuel(car.getId(), typeFirstFuel) > 1;
-        boolean canCalcForSecondFuel = fuelDatabase.calcNumberFuelsForTypeFuel(car.getId(), typeSecondFuel) > 1;
         List<Fuel> listFuels = null;
         try {
             listFuels = fuelDatabase.getAllFuelsForCarIdInCalculationPeriod(String.valueOf(car.getId()), car.convertPeriodTimeToInt());
-        } catch (ParseException e) {
+        }
+        catch (ParseException e) {
             e.printStackTrace();
         }
+        boolean canCalcForFirstFuel = numberFuelsForTypeFuel(listFuels, typeFirstFuel) > 1;
+        boolean canCalcForSecondFuel = numberFuelsForTypeFuel(listFuels, typeSecondFuel) > 1;
         Collections.sort(listFuels, Fuel.Comparators.SORT_BY_DATE);
         Fuel firstFuelFirstTypeForCar = null;
         Fuel firstFuelSecondTypeForCar = null;
@@ -131,13 +132,25 @@ public class CalculateAvarageFuelAndCost {
         return car;
     }
 
+    private static int numberFuelsForTypeFuel(List<Fuel> listFuels, String typeFirstFuel) {
+        int result = 0;
+        if(listFuels != null){
+            for(Fuel fuel : listFuels){
+                if(fuel.getFuelType().equals(typeFirstFuel)){
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+
     /**
      * Method calculate values for car with one type fuel.
      * @param car
-     * @param fuelDatabase
+     * @param database
      * @return
      */
-    private static Car calcForOneTypeFuel(Car car, FuelDatabase fuelDatabase) {
+    private static Car calcForOneTypeFuel(Car car, Database database) {
 
         double sumCostFuels = 0;
         double sumQuantityFuels = 0;
@@ -154,14 +167,14 @@ public class CalculateAvarageFuelAndCost {
         Fuel firstFuelForCar = null;
         List<Fuel> listFuels = null;
         try {
-            listFuels = fuelDatabase.getAllFuelsForCarIdInCalculationPeriod(String.valueOf(car.getId()), car.convertPeriodTimeToInt());
+            listFuels = database.getAllFuelsForCarIdInCalculationPeriod(String.valueOf(car.getId()), car.convertPeriodTimeToInt());
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Collections.sort(listFuels, Fuel.Comparators.SORT_BY_DATE);
 
         if(!listFuels.isEmpty()){
-            if(fuelDatabase.calcNumberFuelsForTypeFuel(car.getId(), car.getFuelType()) > 1){
+            if(numberFuelsForTypeFuel(listFuels, car.getFuelType()) > 1){
                 for (Fuel fuel : listFuels) {
                     if(minMileageFirstTypeFuel == 0 || minMileageFirstTypeFuel > fuel.getMileage()){
                         minMileageFirstTypeFuel = fuel.getMileage();

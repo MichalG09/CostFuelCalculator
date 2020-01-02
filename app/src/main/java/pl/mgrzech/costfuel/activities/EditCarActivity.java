@@ -20,8 +20,7 @@ import java.util.Arrays;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
-import pl.mgrzech.costfuel.database.CarDatabase;
-import pl.mgrzech.costfuel.database.FuelDatabase;
+import pl.mgrzech.costfuel.database.Database;
 import pl.mgrzech.costfuel.models.Car;
 
 import static androidx.appcompat.app.AlertDialog.*;
@@ -29,12 +28,11 @@ import static androidx.appcompat.app.AlertDialog.*;
 public class EditCarActivity  extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private int carIdForEdit;
-    private CarDatabase carDatabase;
+    private Database database;
     private Car carForEdit = null;
     private String typeFuelEditCar;
     private String periodTimeEditCar;
     private String oldTypeFuelEditCar;
-    private FuelDatabase fuelDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,9 +40,8 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
         getIncomingIntent();
         setContentView(R.layout.activity_edit_car);
 
-        carDatabase = new CarDatabase(this);
-        fuelDatabase = new FuelDatabase(this);
-        carForEdit = carDatabase.getCarById(carIdForEdit);
+        database = new Database(this);
+        carForEdit = database.getCarById(carIdForEdit);
         oldTypeFuelEditCar = carForEdit.getFuelType();
 
         TextView branchCar = findViewById(R.id.branchEditCar);
@@ -140,10 +137,10 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
                     builder.setPositiveButton(getString(R.string.edit_activity_confirm), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            fuelDatabase = new FuelDatabase(EditCarActivity.this);
+                            database = new Database(EditCarActivity.this);
                             for (String fuelTypeOne : temp) {
-                                if (fuelDatabase.calcNumberFuelsForTypeFuel(carIdForEdit, fuelTypeOne) > 0)
-                                    fuelDatabase.deleteOneTypeFuelsForCar(carIdForEdit, fuelTypeOne);
+                                if (database.calcNumberFuelsForTypeFuel(carIdForEdit, fuelTypeOne) > 0)
+                                    database.deleteOneTypeFuelsForCar(carIdForEdit, fuelTypeOne);
                             }
                             saveEditedCar();
                         }
@@ -179,9 +176,9 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
     private void saveEditedCar() {
         carForEdit.setFuelType(typeFuelEditCar);
         carForEdit.setPeriodTimeForCalculation(periodTimeEditCar);
-        carDatabase.updateCar(carForEdit);
-        carForEdit = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, carForEdit);
-        carDatabase.updateCar(carForEdit);
+        database.updateCar(carForEdit);
+        carForEdit = CalculateAvarageFuelAndCost.recarkulate(database, carForEdit);
+        database.updateCar(carForEdit);
         Toast.makeText(this, getResources().getString(R.string.edit_activity_message_correct_save_edited_car), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, CarActivity.class);
         intent.putExtra(getString(R.string.carIdIncommingIntent), carForEdit.getId());

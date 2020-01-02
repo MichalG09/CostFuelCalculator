@@ -28,8 +28,7 @@ import java.util.Locale;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
-import pl.mgrzech.costfuel.database.CarDatabase;
-import pl.mgrzech.costfuel.database.FuelDatabase;
+import pl.mgrzech.costfuel.database.Database;
 import pl.mgrzech.costfuel.models.Car;
 import pl.mgrzech.costfuel.models.Fuel;
 
@@ -45,8 +44,7 @@ public class AddFuelActivity extends AppCompatActivity {
     private int mileageAddingFuel;
     private int carIdForFuel;
     private Spinner typeFuelSpinner;
-    private FuelDatabase fuelDatabase;
-    private CarDatabase carDatabase;
+    private Database database;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Car car;
 
@@ -67,9 +65,8 @@ public class AddFuelActivity extends AppCompatActivity {
         mileageAddingFuelText = findViewById(R.id.insertMileageFuel);
         typeFuelSpinner = findViewById(R.id.insertTypeFuelSpinner);
 
-        fuelDatabase = new FuelDatabase(this);
-        carDatabase = new CarDatabase(this);
-        car = carDatabase.getCarById(carIdForFuel);
+        database = new Database(this);
+        car = database.getCarById(carIdForFuel);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, typeFuelForChoosenCar(car.getFuelType()));
         typeFuelSpinner.setAdapter(adapter);
@@ -274,12 +271,12 @@ public class AddFuelActivity extends AppCompatActivity {
 
             Fuel newFuel = new Fuel(dateFuelAddingFuel, typeFuelAddingFuel, costAddingFuel, quantityAddingFuel, mileageAddingFuel);
 
-            if(checkCorrectMileageFuel(newFuel, fuelDatabase)){
-                fuelDatabase.addFuel(newFuel, String.valueOf(carIdForFuel));
+            if(checkCorrectMileageFuel(newFuel, database)){
+                database.addFuel(newFuel, String.valueOf(carIdForFuel));
                 clearView();
-                car = carDatabase.getCarById(carIdForFuel);
-                car = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, car);
-                carDatabase.updateCar(car);
+                car = database.getCarById(carIdForFuel);
+                car = CalculateAvarageFuelAndCost.recarkulate(database, car);
+                database.updateCar(car);
                 Intent intent = new Intent(this, CarActivity.class);
                 intent.putExtra(getString(R.string.carIdIncommingIntent), car.getId());
                 startActivity(intent);
@@ -300,7 +297,7 @@ public class AddFuelActivity extends AppCompatActivity {
      * @param fuelDatabase database witj fuels
      * @return if correct return true, if incorrect return false
      */
-    private boolean checkCorrectMileageFuel(Fuel newFuel, FuelDatabase fuelDatabase) {
+    private boolean checkCorrectMileageFuel(Fuel newFuel, Database fuelDatabase) {
 
         for(Fuel fuel : fuelDatabase.getAllFuelsForCarId(String.valueOf(carIdForFuel))){
             if(newFuel.getFuelType().equals(fuel.getFuelType())){

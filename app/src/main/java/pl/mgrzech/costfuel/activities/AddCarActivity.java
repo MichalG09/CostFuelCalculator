@@ -16,7 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import pl.mgrzech.costfuel.R;
-import pl.mgrzech.costfuel.database.CarDatabase;
+import pl.mgrzech.costfuel.database.Database;
 import pl.mgrzech.costfuel.models.Car;
 
 public class AddCarActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -29,7 +29,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     private Spinner spinnerModelCar;
     private Spinner spinnerTypeFuel;
     private Spinner spinnerPeriodTIme;
-    private CarDatabase carDatabase;
+    private Database database;
     private Context mContext;
 
     @Override
@@ -38,7 +38,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         setContentView(R.layout.activity_add_car);
 
         mContext = this;
-        carDatabase = new CarDatabase(mContext);
+        database = new Database(mContext);
 
         createSpinnerBranchCar();
         spinnerModelCar = findViewById(R.id.spinnerModelCar);
@@ -183,7 +183,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         }
 
         if(correctValidation) {
-            carDatabase.addCar(new Car(brandAddingCar, modelsAddingCar, typeFuelAddingCar, periodTimeAddingCar));
+            database.addCar(new Car(brandAddingCar, modelsAddingCar, typeFuelAddingCar, periodTimeAddingCar));
             Toast.makeText(mContext, getString(R.string.add_car_activity_corrct_message), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(mContext, AllCarsActivity.class);
             startActivity(intent);

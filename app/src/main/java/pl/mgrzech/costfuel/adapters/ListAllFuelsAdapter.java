@@ -17,8 +17,7 @@ import java.util.List;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
-import pl.mgrzech.costfuel.database.CarDatabase;
-import pl.mgrzech.costfuel.database.FuelDatabase;
+import pl.mgrzech.costfuel.database.Database;
 import pl.mgrzech.costfuel.models.Car;
 import pl.mgrzech.costfuel.models.Fuel;
 
@@ -63,16 +62,15 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        FuelDatabase fuelDatabase = new FuelDatabase(mContext);
-                        String carId = fuelDatabase.getCarIdForFuels(String.valueOf(fuel.getId()));
-                        int result = fuelDatabase.deleteFuel(fuel);
+                        Database database = new Database(mContext);
+                        String carId = database.getCarIdForFuels(String.valueOf(fuel.getId()));
+                        int result = database.deleteFuel(fuel);
                         if(result > 0){
-                            CarDatabase carDatabase = new CarDatabase(mContext);
-                            Car car = carDatabase.getCarById(Integer.valueOf(carId));
+                            Car car = database.getCarById(Integer.valueOf(carId));
                             mListFuels.remove(fuel);
                             notifyDataSetChanged();
-                            car = CalculateAvarageFuelAndCost.recarkulate(fuelDatabase, car);
-                            carDatabase.updateCar(car);
+                            car = CalculateAvarageFuelAndCost.recarkulate(database, car);
+                            database.updateCar(car);
                             Toast.makeText(mContext, mContext.getString(R.string.all_fuels_adapter_correct_delete), Toast.LENGTH_LONG ).show();
                         }
                         else {

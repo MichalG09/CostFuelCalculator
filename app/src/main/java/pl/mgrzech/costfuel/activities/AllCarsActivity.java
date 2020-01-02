@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.adapters.ListAllCarAdapter;
-import pl.mgrzech.costfuel.database.CarDatabase;
-import pl.mgrzech.costfuel.database.FuelDatabase;
+import pl.mgrzech.costfuel.database.Database;
 import pl.mgrzech.costfuel.models.Car;
-import pl.mgrzech.costfuel.models.Fuel;
 
+/**
+ * Start Activity
+ */
 public class AllCarsActivity extends AppCompatActivity {
 
     @Override
@@ -37,8 +37,12 @@ public class AllCarsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        CarDatabase carDatabase = new CarDatabase(this);
-        List<Car> listCar = carDatabase.getAllCars();
+        Database database = new Database(this);
+        List<Car> listCar = database.getAllCars();
+
+//        FuelDatabase fuelDatabase = new FuelDatabase(this);
+//        List<Fuel> allFuels = fuelDatabase.getAllFuels();
+
         recyclerView.setAdapter(new ListAllCarAdapter(listCar, this));
     }
 
@@ -77,10 +81,9 @@ public class AllCarsActivity extends AppCompatActivity {
     }
 
     public void clearDatabase(View view) {
-        CarDatabase carDatabase = new CarDatabase(this);
-        carDatabase.clearDatabase();
-        FuelDatabase fuelDatabase = new FuelDatabase(this);
-        fuelDatabase.clearDatabase();
+        Database database = new Database(this);
+        database.clearDatabase();
+        database.delete();
         Intent intent = new Intent(this, AllCarsActivity.class);
         startActivity(intent);
     }
