@@ -69,7 +69,8 @@ public class ListAllFuelsAdapter extends RecyclerView.Adapter<ListAllFuelsAdapte
                             Car car = database.getCarById(Integer.valueOf(carId));
                             mListFuels.remove(fuel);
                             notifyDataSetChanged();
-                            car = CalculateAvarageFuelAndCost.recarkulate(database, car);
+                            CalculateAvarageFuelAndCost calculateAvarageFuelAndCost = new CalculateAvarageFuelAndCost();
+                            car = calculateAvarageFuelAndCost.recalculate(database, car);
                             database.updateCar(car);
                             Toast.makeText(mContext, mContext.getString(R.string.all_fuels_adapter_correct_delete), Toast.LENGTH_LONG ).show();
                         }

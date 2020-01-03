@@ -33,6 +33,7 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
     private String typeFuelEditCar;
     private String periodTimeEditCar;
     private String oldTypeFuelEditCar;
+    private CalculateAvarageFuelAndCost calculateAvarageFuelAndCost = new CalculateAvarageFuelAndCost();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -128,7 +129,7 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
         if(correctValidation) {
             if(!oldTypeFuelEditCar.equals(typeFuelEditCar)) {
                 if (!typeFuelEditCar.contains(oldTypeFuelEditCar)) {
-                    final String[] temp = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuelEditCar, typeFuelEditCar);
+                    final String[] temp = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuelEditCar, typeFuelEditCar);
 
                     Builder builder = new Builder(EditCarActivity.this);
                     builder.setTitle(getString(R.string.edit_activity_title_error_message));
@@ -177,7 +178,7 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
         carForEdit.setFuelType(typeFuelEditCar);
         carForEdit.setPeriodTimeForCalculation(periodTimeEditCar);
         database.updateCar(carForEdit);
-        carForEdit = CalculateAvarageFuelAndCost.recarkulate(database, carForEdit);
+        carForEdit = calculateAvarageFuelAndCost.recalculate(database, carForEdit);
         database.updateCar(carForEdit);
         Toast.makeText(this, getResources().getString(R.string.edit_activity_message_correct_save_edited_car), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, CarActivity.class);

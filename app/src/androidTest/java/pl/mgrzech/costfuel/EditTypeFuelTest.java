@@ -19,13 +19,14 @@ public class EditTypeFuelTest {
     private String newTypeFuel;
     private String[] result;
     private String[] expectedResult;
+    private CalculateAvarageFuelAndCost calculateAvarageFuelAndCost = new CalculateAvarageFuelAndCost();
 
     @Test
     public void aChangeFuel(){
         oldTypeFuel = "PB";
         newTypeFuel = "ON";
         expectedResult = new String[]{"PB"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -34,7 +35,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "PB";
         newTypeFuel = "ON + AddBlue";
         expectedResult = new String[]{"PB"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -43,7 +44,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "PB + LPG";
         newTypeFuel = "ON";
         expectedResult = new String[]{"PB", "LPG"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -52,7 +53,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "PB + LPG";
         newTypeFuel = "ON + AddBlue";
         expectedResult = new String[]{"PB", "LPG"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -61,7 +62,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "PB + LPG";
         newTypeFuel = "PB";
         expectedResult = new String[]{"LPG"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -70,7 +71,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "ON";
         newTypeFuel = "PB";
         expectedResult = new String[]{"ON"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -79,7 +80,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "ON";
         newTypeFuel = "PB + LPG";
         expectedResult = new String[]{"ON"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -88,7 +89,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "ON + AddBlue";
         newTypeFuel = "PB + LPG";
         expectedResult = new String[]{"ON", "AddBlue"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -97,7 +98,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "ON + AddBlue";
         newTypeFuel = "PB";
         expectedResult = new String[]{"ON", "AddBlue"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 
@@ -106,7 +107,7 @@ public class EditTypeFuelTest {
         oldTypeFuel = "ON + AddBlue";
         newTypeFuel = "ON";
         expectedResult = new String[]{"AddBlue"};
-        result = CalculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
+        result = calculateAvarageFuelAndCost.fuelTypeForDeleting(oldTypeFuel, newTypeFuel);
         assertArrayEquals(expectedResult, result);
     }
 }

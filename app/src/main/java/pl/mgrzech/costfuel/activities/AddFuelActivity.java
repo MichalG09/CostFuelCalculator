@@ -234,6 +234,7 @@ public class AddFuelActivity extends AppCompatActivity {
 
         String errorMessage = "";
         String typeFuelAddingFuel = String.valueOf(typeFuelSpinner.getSelectedItem());
+        CalculateAvarageFuelAndCost calculateAvarageFuelAndCost = new CalculateAvarageFuelAndCost();
 
         if(dateFuelAddingFuel.isEmpty()){
             errorMessage += getString(R.string.add_fuel_activity_incorrect_date);
@@ -275,7 +276,7 @@ public class AddFuelActivity extends AppCompatActivity {
                 database.addFuel(newFuel, String.valueOf(carIdForFuel));
                 clearView();
                 car = database.getCarById(carIdForFuel);
-                car = CalculateAvarageFuelAndCost.recarkulate(database, car);
+                car = calculateAvarageFuelAndCost.recalculate(database, car);
                 database.updateCar(car);
                 Intent intent = new Intent(this, CarActivity.class);
                 intent.putExtra(getString(R.string.carIdIncommingIntent), car.getId());

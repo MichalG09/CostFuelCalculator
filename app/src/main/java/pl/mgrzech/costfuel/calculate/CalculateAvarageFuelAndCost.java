@@ -1,6 +1,7 @@
 package pl.mgrzech.costfuel.calculate;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,11 +15,11 @@ public class CalculateAvarageFuelAndCost {
      * Method calculate average cost and average fuel consumption for car per 100 km.
      * Method checks number type fuel for car and select corrects algorithm to calculate.
      * Moetoda przelicza koszt i spalanie samochodu na 100 km
-     * @param database
-     * @param car
+     * @param database database
+     * @param car car
      * @return Car with new average values
      */
-    public static Car recarkulate(Database database, Car car) {
+    public Car recalculate(Database database, Car car) {
 
         if (car.getFuelType().contains("+")){
             return calcForTwoTypeFuel(car, database);
@@ -30,29 +31,29 @@ public class CalculateAvarageFuelAndCost {
 
     /**
      * Method calculate values for car with two type fuels.
-     * @param car
-     * @param fuelDatabase
-     * @return
+     * @param car car
+     * @param database database
+     * @return Car with updated average values
      */
-    private static Car calcForTwoTypeFuel(Car car, Database fuelDatabase) {
+    private Car calcForTwoTypeFuel(Car car, Database database) {
         double sumCostFuels = 0;
         double sumQuantityFuels = 0;
-        double avarageCost = 0;
-        double avarageFuelConsumption = 0;
+        double averageCost = 0;
+        double averageFuelConsumption = 0;
         int minMileageFirstTypeFuel = 0;
         int maxMileageFirstTypeFuel = 0;
         int maxMileageSecondTypeFuel = 0;
         int minMileageSecondTypeFuel = 0;
         double sumCostSecondTypeFuel = 0;
         double sumQuantitySecondTypeFuel = 0;
-        double avarageCostSecondTypeFuel = 0;
-        double avarageFuelConsumptionSecondTypeFuel = 0;
+        double averageCostSecondTypeFuel = 0;
+        double averageFuelConsumptionSecondTypeFuel = 0;
         String[] typesFuel = car.getFuelType().split("\\+");
         String typeFirstFuel = typesFuel[0].trim();
         String typeSecondFuel = typesFuel[1].trim();
-        List<Fuel> listFuels = null;
+        List<Fuel> listFuels = new ArrayList<>();
         try {
-            listFuels = fuelDatabase.getAllFuelsForCarIdInCalculationPeriod(String.valueOf(car.getId()), car.convertPeriodTimeToInt());
+            listFuels = database.getAllFuelsForCarIdInCalculationPeriod(String.valueOf(car.getId()), car.convertPeriodTimeToInt());
         }
         catch (ParseException e) {
             e.printStackTrace();
@@ -109,30 +110,30 @@ public class CalculateAvarageFuelAndCost {
                 return car;
             }
             else if (deltaMileageFirstTypeFuel > 0 && deltaMileageSecondTypeFuel <= 0) {
-                avarageCost = (sumCostFuels - firstFuelFirstTypeForCar.getCost()) / deltaMileageFirstTypeFuel;
-                avarageFuelConsumption = (sumQuantityFuels - firstFuelFirstTypeForCar.getQuantity()) / deltaMileageFirstTypeFuel;
+                averageCost = (sumCostFuels - firstFuelFirstTypeForCar.getCost()) / deltaMileageFirstTypeFuel;
+                averageFuelConsumption = (sumQuantityFuels - firstFuelFirstTypeForCar.getQuantity()) / deltaMileageFirstTypeFuel;
             }
             else if (deltaMileageFirstTypeFuel <= 0 && deltaMileageSecondTypeFuel > 0) {
-                avarageCostSecondTypeFuel = (sumCostSecondTypeFuel - firstFuelSecondTypeForCar.getCost()) / deltaMileageSecondTypeFuel;
-                avarageFuelConsumptionSecondTypeFuel = (sumQuantitySecondTypeFuel - firstFuelSecondTypeForCar.getQuantity()) / deltaMileageSecondTypeFuel;
+                averageCostSecondTypeFuel = (sumCostSecondTypeFuel - firstFuelSecondTypeForCar.getCost()) / deltaMileageSecondTypeFuel;
+                averageFuelConsumptionSecondTypeFuel = (sumQuantitySecondTypeFuel - firstFuelSecondTypeForCar.getQuantity()) / deltaMileageSecondTypeFuel;
             }
             else {
-                avarageCost = (sumCostFuels - firstFuelFirstTypeForCar.getCost()) / deltaMileageFirstTypeFuel;
-                avarageFuelConsumption = (sumQuantityFuels - firstFuelFirstTypeForCar.getQuantity()) / deltaMileageFirstTypeFuel;
-                avarageCostSecondTypeFuel = (sumCostSecondTypeFuel - firstFuelSecondTypeForCar.getCost()) / deltaMileageSecondTypeFuel;
-                avarageFuelConsumptionSecondTypeFuel = (sumQuantitySecondTypeFuel - firstFuelSecondTypeForCar.getQuantity()) / deltaMileageSecondTypeFuel;
+                averageCost = (sumCostFuels - firstFuelFirstTypeForCar.getCost()) / deltaMileageFirstTypeFuel;
+                averageFuelConsumption = (sumQuantityFuels - firstFuelFirstTypeForCar.getQuantity()) / deltaMileageFirstTypeFuel;
+                averageCostSecondTypeFuel = (sumCostSecondTypeFuel - firstFuelSecondTypeForCar.getCost()) / deltaMileageSecondTypeFuel;
+                averageFuelConsumptionSecondTypeFuel = (sumQuantitySecondTypeFuel - firstFuelSecondTypeForCar.getQuantity()) / deltaMileageSecondTypeFuel;
             }
 
-            car.setAverageConsumptionFirstFuel(avarageFuelConsumption * 100);
-            car.setAverageCostFirstFuel(avarageCost * 100);
-            car.setAverageConsumptionSecondFuel(avarageFuelConsumptionSecondTypeFuel * 100);
-            car.setAverageCostSecondFuel(avarageCostSecondTypeFuel * 100);
+            car.setAverageConsumptionFirstFuel(averageFuelConsumption * 100);
+            car.setAverageCostFirstFuel(averageCost * 100);
+            car.setAverageConsumptionSecondFuel(averageFuelConsumptionSecondTypeFuel * 100);
+            car.setAverageCostSecondFuel(averageCostSecondTypeFuel * 100);
         }
 
         return car;
     }
 
-    private static int numberFuelsForTypeFuel(List<Fuel> listFuels, String typeFirstFuel) {
+    private int numberFuelsForTypeFuel(List<Fuel> listFuels, String typeFirstFuel) {
         int result = 0;
         if(listFuels != null){
             for(Fuel fuel : listFuels){
@@ -146,11 +147,11 @@ public class CalculateAvarageFuelAndCost {
 
     /**
      * Method calculate values for car with one type fuel.
-     * @param car
-     * @param database
-     * @return
+     * @param car car
+     * @param database database
+     * @return Car with updated average values
      */
-    private static Car calcForOneTypeFuel(Car car, Database database) {
+    private Car calcForOneTypeFuel(Car car, Database database) {
 
         double sumCostFuels = 0;
         double sumQuantityFuels = 0;
@@ -158,14 +159,8 @@ public class CalculateAvarageFuelAndCost {
         double avarageFuelConsumption = 0;
         int minMileageFirstTypeFuel = 0;
         int maxMileageFirstTypeFuel = 0;
-        int maxMileageSecondTypeFuel = 0;
-        int minMileageSecondTypeFuel = 0;
-        double sumCostSecondTypeFuel = 0;
-        double sumQuantitySecondTypeFuel = 0;
-        double averageCostSecondTypeFuel = 0;
-        double averageFuelConsumptionSecondTypeFuel = 0;
         Fuel firstFuelForCar = null;
-        List<Fuel> listFuels = null;
+        List<Fuel> listFuels = new ArrayList<>();
         try {
             listFuels = database.getAllFuelsForCarIdInCalculationPeriod(String.valueOf(car.getId()), car.convertPeriodTimeToInt());
         } catch (ParseException e) {
@@ -212,10 +207,17 @@ public class CalculateAvarageFuelAndCost {
         return car;
     }
 
-    public static String[] fuelTypeForDeleting(String oldTypeFuelEditCar, String typeFuelEditCar) {
-        String oldFirstFuelType = "";
+    /**
+     * Method compare fuel type for car before and after edit car and return fuel type to delete.
+     * Metoda porównuje rodzaje paliwa dla samochodu przed i po edytowaniu samochodu i zwraca rodzaj paliwa do usuniecia
+     * @param oldTypeFuelEditCar fuel type before edit
+     * @param typeFuelEditCar fuel type after edit
+     * @return table with fuel type to delete
+     */
+    public String[] fuelTypeForDeleting(String oldTypeFuelEditCar, String typeFuelEditCar) {
+        String oldFirstFuelType;
         String oldSecondFuelType = "";
-        String newFirstFuelType = "";
+        String newFirstFuelType;
         String regexForSplitString = " + ";
         String[] result = new String[1];
 
