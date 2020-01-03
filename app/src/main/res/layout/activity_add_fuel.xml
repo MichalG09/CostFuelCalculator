@@ -19,17 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:theme="@style/AppTheme.PopupOverlay" />
-
     </com.google.android.material.appbar.AppBarLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="@string/titleAddFuel"
-        android:textSize="25sp" />
 
     <Spinner
         android:id="@+id/insertTypeFuelSpinner"
@@ -73,7 +63,6 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:text="@string/activity_add_fuel_unit_cost" />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -99,7 +88,6 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="18dp"
             android:text="@string/activity_add_fuel_unit_quantity" />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -125,13 +113,12 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:text="@string/activity_add_fuel_unit_mileage" />
-
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="25"
+        android:layout_weight="35"
         android:orientation="vertical">
     </RelativeLayout>
 
@@ -145,5 +132,4 @@
         android:onClick="saveFuel"
         android:text="@string/Save"
         android:textSize="20sp" />
-
 </LinearLayout>

@@ -15,17 +15,12 @@ import pl.mgrzech.costfuel.R;
 
 public class AboutActivity extends AppCompatActivity {
 
-    private TextView versionProgram;
-    private TextView nameProgram;
-    private TextView author;
-    private TextView website;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -34,25 +29,24 @@ public class AboutActivity extends AppCompatActivity {
 
         String versionName = BuildConfig.VERSION_NAME;
 
-        nameProgram = findViewById(R.id.aboutNameProgram);
-        nameProgram.setText(getResources().getString(R.string.app_name_pl));
+        TextView nameProgram = findViewById(R.id.aboutNameProgram);
+        nameProgram.setText(getString(R.string.app_name_pl));
 
-        versionProgram = findViewById(R.id.aboutVersionProgram);
-        versionProgram.setText("ver. " + versionName);
+        TextView versionProgram = findViewById(R.id.aboutVersionProgram);
+        versionProgram.setText(getString(R.string.about_activit_version) + " " + versionName);
 
-        author = findViewById(R.id.aboutAuthor);
-        author.setText(getResources().getString(R.string.about_activity_author));
+        TextView author = findViewById(R.id.aboutAuthor);
+        author.setText(getString(R.string.about_activity_author));
 
-        website = findViewById(R.id.aboutWebsite);
-        website.setText(getResources().getString(R.string.about_activity_website));
+        TextView website = findViewById(R.id.aboutWebsite);
+        website.setText(getString(R.string.about_activity_website));
 
         website.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.about_activity_website_link)));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.about_activity_website_link)));
                 startActivity(browserIntent);
             }
         });
-
     }
 }

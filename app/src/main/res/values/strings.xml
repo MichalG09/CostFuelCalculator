@@ -923,7 +923,7 @@
     <string name="all_fuels_adapter_error_during_delete">Błąd przy usuwaniu !</string>
     <string name="all_fuels_adapter_correct_delete">Poprawnie usunięto tankowanie</string>
     <string name="toolbar_instruction">Instrukcja</string>
-    <string name="toolbar_about_app">O Programie</string>
+    <string name="toolbar_about_app">O Aplikacji</string>
     <string name="activity_car_edit_button">Button for start edit car activity</string>
     <string name="car_activity_consumption">Spalanie:</string>
     <string name="car_activity_change_position_fuel_position">button change show value for two position for each type fuel</string>
@@ -942,4 +942,5 @@
     <string name="car_row_button_add_fuel">Button to add fuel from main avtivity</string>
     <string name="fuel_row_button_delete_fuel">fuel_row_button_delete_fuel</string>
     <string name="activity_all_fuels_no_fuels_to_show">Brak tankowań</string>
+    <string name="about_activit_version">ver.</string>
 </resources>

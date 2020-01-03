@@ -40,9 +40,6 @@ public class AllCarsActivity extends AppCompatActivity {
         Database database = new Database(this);
         List<Car> listCar = database.getAllCars();
 
-//        FuelDatabase fuelDatabase = new FuelDatabase(this);
-//        List<Fuel> allFuels = fuelDatabase.getAllFuels();
-
         recyclerView.setAdapter(new ListAllCarAdapter(listCar, this));
     }
 
@@ -80,11 +77,4 @@ public class AllCarsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void clearDatabase(View view) {
-        Database database = new Database(this);
-        database.clearDatabase();
-        database.delete();
-        Intent intent = new Intent(this, AllCarsActivity.class);
-        startActivity(intent);
-    }
 }
