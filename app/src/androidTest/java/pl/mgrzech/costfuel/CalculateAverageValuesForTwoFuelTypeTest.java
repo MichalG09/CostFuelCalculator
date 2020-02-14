@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
 import pl.mgrzech.costfuel.database.Database;
+import pl.mgrzech.costfuel.database.DatabaseSingleton;
 import pl.mgrzech.costfuel.models.Car;
 import pl.mgrzech.costfuel.models.Fuel;
 
@@ -47,7 +48,7 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
     @BeforeClass
     public static void onStart() {
         Context mContext = ApplicationProvider.getApplicationContext();
-        database = new Database(mContext);
+        database = DatabaseSingleton.getInstance(mContext);
         testingCar = new Car("TestTwoType", "Test", "PB + LPG", "Brak ograniczeń");
         database.addCar(testingCar);
     }
