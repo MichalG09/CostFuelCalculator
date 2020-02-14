@@ -21,6 +21,7 @@ import java.util.Arrays;
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
 import pl.mgrzech.costfuel.database.Database;
+import pl.mgrzech.costfuel.database.DatabaseSingleton;
 import pl.mgrzech.costfuel.models.Car;
 
 import static androidx.appcompat.app.AlertDialog.*;
@@ -41,7 +42,7 @@ public class EditCarActivity  extends AppCompatActivity implements AdapterView.O
         getIncomingIntent();
         setContentView(R.layout.activity_edit_car);
 
-        database = new Database(this);
+        database = DatabaseSingleton.getInstance(this);
         carForEdit = database.getCarById(carIdForEdit);
         oldTypeFuelEditCar = carForEdit.getFuelType();
 

@@ -17,6 +17,7 @@ import java.util.List;
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.adapters.ListAllCarAdapter;
 import pl.mgrzech.costfuel.database.Database;
+import pl.mgrzech.costfuel.database.DatabaseSingleton;
 import pl.mgrzech.costfuel.models.Car;
 
 /**
@@ -37,7 +38,7 @@ public class AllCarsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        Database database = new Database(this);
+        Database database = DatabaseSingleton.getInstance(this);
         List<Car> listCar = database.getAllCars();
 
         recyclerView.setAdapter(new ListAllCarAdapter(listCar, this));

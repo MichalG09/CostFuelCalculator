@@ -1,6 +1,5 @@
 package pl.mgrzech.costfuel.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.database.Database;
+import pl.mgrzech.costfuel.database.DatabaseSingleton;
 import pl.mgrzech.costfuel.models.Car;
 
 public class AddCarActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -30,15 +30,13 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
     private Spinner spinnerTypeFuel;
     private Spinner spinnerPeriodTIme;
     private Database database;
-    private Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_car);
 
-        mContext = this;
-        database = new Database(mContext);
+        database = DatabaseSingleton.getInstance(this);
 
         createSpinnerBranchCar();
         spinnerModelCar = findViewById(R.id.spinnerModelCar);
@@ -93,7 +91,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
      * Metoda tworzy spinner z markami samochodów
      */
     private void createSpinnerBranchCar() {
-        Toast.makeText(mContext, getString(R.string.add_car_activity_choose_branch), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.add_car_activity_choose_branch), Toast.LENGTH_SHORT).show();
         spinnerBranchCar = findViewById(R.id.spinnerBranchCar);
         createSpinner(spinnerBranchCar, R.array.brands_cars);
     }
@@ -140,7 +138,7 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
      * @param textArray id array with data for spinner
      */
     private void createSpinner(Spinner spinner, int textArray){
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 textArray, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -164,32 +162,32 @@ public class AddCarActivity extends AppCompatActivity implements AdapterView.OnI
         if(brandAddingCar.isEmpty()){
             textErrorValidation = textErrorValidation + getString(R.string.add_car_activity_incorrect_branch);
             correctValidation = false;
-            spinnerBranchCar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backdroundForValidationError));
+            spinnerBranchCar.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
         if(modelsAddingCar.isEmpty() || modelsAddingCar.equals(getString(R.string.model_car_for_validate))){
             textErrorValidation = textErrorValidation + getString(R.string.add_car_activity_incorrect_model);
             correctValidation = false;
-            spinnerModelCar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backdroundForValidationError));
+            spinnerModelCar.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
         if (typeFuelAddingCar.isEmpty() || typeFuelAddingCar.equals(getString(R.string.fuel_type_for_validate))){
             textErrorValidation = textErrorValidation + getString(R.string.add_car_activity_incorrect_type_fuel);
             correctValidation = false;
-            spinnerTypeFuel.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backdroundForValidationError));
+            spinnerTypeFuel.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
         if (periodTimeAddingCar.isEmpty() || periodTimeAddingCar.equals(getString(R.string.choose_period_time))){
             textErrorValidation = textErrorValidation + getString(R.string.add_car_activity_incorrect_period);
             correctValidation = false;
-            spinnerPeriodTIme.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backdroundForValidationError));
+            spinnerPeriodTIme.setBackgroundColor(ContextCompat.getColor(this, R.color.backdroundForValidationError));
         }
 
         if(correctValidation) {
             database.addCar(new Car(brandAddingCar, modelsAddingCar, typeFuelAddingCar, periodTimeAddingCar));
-            Toast.makeText(mContext, getString(R.string.add_car_activity_corrct_message), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(mContext, AllCarsActivity.class);
+            Toast.makeText(this, getString(R.string.add_car_activity_corrct_message), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, AllCarsActivity.class);
             startActivity(intent);
         }
         else{
-            Toast.makeText(mContext, textErrorValidation, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, textErrorValidation, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.database.Database;
+import pl.mgrzech.costfuel.database.DatabaseSingleton;
 import pl.mgrzech.costfuel.models.Car;
 
 public class CarActivity extends AppCompatActivity {
@@ -53,7 +54,7 @@ public class CarActivity extends AppCompatActivity {
         noDataMessage = getResources().getString(R.string.no_data);
         errorDataMessage = getResources().getString(R.string.error_data);
 
-        database = new Database(this);
+        database = DatabaseSingleton.getInstance(this);
         car = database.getCarById(carIdForShow);
 
         TextView carMarkInfo = findViewById(R.id.carActivityCarMark);

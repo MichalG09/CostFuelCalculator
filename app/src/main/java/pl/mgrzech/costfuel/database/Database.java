@@ -21,7 +21,8 @@ import pl.mgrzech.costfuel.models.Fuel;
 
 public class Database extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 37;
+    //40
+    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "databaseCostFuel";
     private static final String TABLE_CARS = "cars";
     private static final String TABLE_FUELS = "fuels";

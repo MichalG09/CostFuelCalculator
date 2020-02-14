@@ -29,6 +29,7 @@ import java.util.Locale;
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.calculate.CalculateAvarageFuelAndCost;
 import pl.mgrzech.costfuel.database.Database;
+import pl.mgrzech.costfuel.database.DatabaseSingleton;
 import pl.mgrzech.costfuel.models.Car;
 import pl.mgrzech.costfuel.models.Fuel;
 
@@ -65,7 +66,7 @@ public class AddFuelActivity extends AppCompatActivity {
         mileageAddingFuelText = findViewById(R.id.insertMileageFuel);
         typeFuelSpinner = findViewById(R.id.insertTypeFuelSpinner);
 
-        database = new Database(this);
+        database = DatabaseSingleton.getInstance(this);
         car = database.getCarById(carIdForFuel);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, typeFuelForChoosenCar(car.getFuelType()));
