@@ -1,9 +1,6 @@
 package pl.mgrzech.costfuel.presenters;
 
-import android.content.Context;
-import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Spinner;
 
 public interface IAddCarPresenter {
 

@@ -17,7 +17,6 @@ import pl.mgrzech.costfuel.models.Car;
 
 public class AddCarPresenter implements IAddCarPresenter {
 
-    private IAddCarView addCarView;
     private Context mContext;
     private AdapterView.OnItemSelectedListener listener;
 
@@ -30,16 +29,15 @@ public class AddCarPresenter implements IAddCarPresenter {
     private Spinner spinnerTypeFuel;
     private Spinner spinnerPeriodTIme;
 
-    public AddCarPresenter(IAddCarView addCarView, Context context, Spinner spinnerBranchCar,
-                           Spinner spinnerModelCar, Spinner spinnerTypeFuel, Spinner spinnerPeriodTIme) {
+    public AddCarPresenter(IAddCarView addCarView, Spinner spinnerBranchCar, Spinner spinnerModelCar,
+                           Spinner spinnerTypeFuel, Spinner spinnerPeriodTIme) {
 
-        this.addCarView = addCarView;
-        this.mContext = context;
+        this.mContext = (Context)addCarView;
         this.spinnerBranchCar = spinnerBranchCar;
         this.spinnerModelCar = spinnerModelCar;
         this.spinnerTypeFuel = spinnerTypeFuel;
         this.spinnerPeriodTIme = spinnerPeriodTIme;
-        listener = (AdapterView.OnItemSelectedListener) mContext;
+        this.listener = (AdapterView.OnItemSelectedListener) mContext;
     }
 
     /**
@@ -48,7 +46,8 @@ public class AddCarPresenter implements IAddCarPresenter {
      */
     @Override
     public void createSpinnerBranchCar() {
-        Toast.makeText(mContext, mContext.getString(R.string.add_car_activity_choose_branch), Toast.LENGTH_SHORT).show();
+        showTextMessage(R.string.add_car_activity_choose_branch);
+
         createSpinner(spinnerBranchCar, listener, R.array.brands_cars);
     }
 
@@ -58,7 +57,7 @@ public class AddCarPresenter implements IAddCarPresenter {
      */
     @Override
     public void createSpinnerModelCar() {
-        Toast.makeText(mContext, mContext.getString(R.string.add_car_activity_chose_model), Toast.LENGTH_SHORT).show();
+        showTextMessage(R.string.add_car_activity_chose_model);
 
         spinnerModelCar.setVisibility(View.VISIBLE);
         createSpinner(spinnerModelCar, listener, getListModelCarForBrand(brandAddingCar));
@@ -67,7 +66,7 @@ public class AddCarPresenter implements IAddCarPresenter {
 
     @Override
     public void createSpinnerTypeFuel() {
-        Toast.makeText(mContext, mContext.getString(R.string.add_car_activity_chose_fuel_type), Toast.LENGTH_SHORT).show();
+        showTextMessage(R.string.add_car_activity_chose_fuel_type);
 
         spinnerTypeFuel.setVisibility(View.VISIBLE);
         createSpinner(spinnerTypeFuel, listener, R.array.types_fuel);
@@ -76,11 +75,24 @@ public class AddCarPresenter implements IAddCarPresenter {
 
     @Override
     public void createSpinnerPeriodTime() {
-        Toast.makeText(mContext, mContext.getString(R.string.add_car_activity_chose_period_time), Toast.LENGTH_SHORT).show();
+        showTextMessage(R.string.add_car_activity_chose_period_time);
 
         spinnerPeriodTIme.setVisibility(View.VISIBLE);
         createSpinner(spinnerPeriodTIme, listener, R.array.period_time);
         periodTimeAddingCar = "";
+    }
+
+    /**
+     * Methods creates spinner with basic parameters
+     * @param spinner spinner to create
+     * @param textArray id array with data for spinner
+     */
+    private void createSpinner(Spinner spinner, AdapterView.OnItemSelectedListener listener, int textArray){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext,
+                textArray, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(listener);
     }
 
     @Override
@@ -142,7 +154,7 @@ public class AddCarPresenter implements IAddCarPresenter {
         if(correctValidation) {
             Database database = DatabaseSingleton.getInstance(mContext);
             database.addCar(new Car(brandAddingCar, modelAddingCar, typeFuelAddingCar, periodTimeAddingCar));
-            Toast.makeText(mContext, mContext.getString(R.string.add_car_activity_corrct_message), Toast.LENGTH_LONG).show();
+            showTextMessage(R.string.add_car_activity_corrct_message);
             return true;
         }
         else{
@@ -167,17 +179,8 @@ public class AddCarPresenter implements IAddCarPresenter {
         }
     }
 
-    /**
-     * Methods creates spinner with basic parameters
-     * @param spinner spinner to create
-     * @param textArray id array with data for spinner
-     */
-    private void createSpinner(Spinner spinner, AdapterView.OnItemSelectedListener listener, int textArray){
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext,
-                textArray, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(listener);
+    private void showTextMessage(int idTextMessage) {
+        Toast.makeText(mContext, mContext.getString(idTextMessage), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -187,7 +190,7 @@ public class AddCarPresenter implements IAddCarPresenter {
      *
      */
     private void changeBackgroundColor(Spinner spinner) {
-        spinner.setBackgroundColor(ContextCompat.getColor(mContext, R.color.normalBackground));
+        spinner.setBackgroundColor(ContextCompat.getColor(mContext, R.color.basicBackground));
     }
 
     /**

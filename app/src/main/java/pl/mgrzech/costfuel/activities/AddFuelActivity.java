@@ -190,7 +190,7 @@ public class AddFuelActivity extends AppCompatActivity {
         try{
             ColorDrawable mileageAddingFuelTextColor = (ColorDrawable) editText.getBackground();
             if(mileageAddingFuelTextColor.getColor() == Color.RED){
-                editText.setBackgroundColor(ContextCompat.getColor(this, R.color.normalBackground));
+                editText.setBackgroundColor(ContextCompat.getColor(this, R.color.basicBackground));
             }
         }catch (Exception e){
             e.printStackTrace();

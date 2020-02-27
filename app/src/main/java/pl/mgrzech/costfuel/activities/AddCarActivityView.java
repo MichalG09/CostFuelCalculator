@@ -24,8 +24,9 @@ public class AddCarActivityView extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_car);
 
-        addCarPresenter = new AddCarPresenter(this, this, (Spinner)findViewById(R.id.spinnerBranchCar),
-                (Spinner)findViewById(R.id.spinnerModelCar), (Spinner)findViewById(R.id.spinnerTypeFuelCar), (Spinner)findViewById(R.id.spinnerPeriodTime));
+        addCarPresenter = new AddCarPresenter(this, (Spinner)findViewById(R.id.spinnerBranchCar),
+                (Spinner)findViewById(R.id.spinnerModelCar), (Spinner)findViewById(R.id.spinnerTypeFuelCar),
+                (Spinner)findViewById(R.id.spinnerPeriodTime));
 
         addCarPresenter.createSpinnerBranchCar();
 
