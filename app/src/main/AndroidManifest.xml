@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.AddCarActivity"
+            android:name=".activities.AddCarActivityView"
             android:label="DODAJ SAMOCHÓD"
             android:autoRemoveFromRecents="true"
             android:parentActivityName=".activities.AllCarsActivity"

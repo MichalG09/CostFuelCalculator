@@ -21,8 +21,8 @@ import pl.mgrzech.costfuel.models.Fuel;
 
 public class Database extends SQLiteOpenHelper {
 
-    //40
-    private static final int DATABASE_VERSION = 1;
+    //41
+    private static final int DATABASE_VERSION = 41;
     private static final String DATABASE_NAME = "databaseCostFuel";
     private static final String TABLE_CARS = "cars";
     private static final String TABLE_FUELS = "fuels";
@@ -58,7 +58,7 @@ public class Database extends SQLiteOpenHelper {
         String CREATE_FUELS_TABLE = "CREATE TABLE " + TABLE_FUELS + " (" +
                 KEY_ID + " INTEGER PRIMARY KEY, " + FUEL_KEY_FUEL_TYPE + " TEXT, " +
                 FUEL_KEY_DATE + " TEXT, " + FUEL_KEY_COST + " INTEGER, " +
-                FUEL_KEY_QUANTITY + " INTEGER ," + FUEL_KEY_MILEAGE + " INTEGER ," + FUEL_KEY_CAR_ID + " TEXT " + ")";
+                FUEL_KEY_QUANTITY + " INTEGER ," + FUEL_KEY_MILEAGE + " INTEGER ," + FUEL_KEY_CAR_ID + " INTEGER " + ")";
         db.execSQL(CREATE_FUELS_TABLE);
     }
 
@@ -108,7 +108,8 @@ public class Database extends SQLiteOpenHelper {
     public Car getCarById(int id){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.query(TABLE_CARS, new String[]{KEY_ID, CAR_KEY_MARK, CAR_KEY_MODEL, CAR_KEY_FUEL_CONSUMPTION_FIRST, CAR_KEY_COST_FIRST, CAR_KEY_FUEL_CONSUMPTION_SECOND, CAR_KEY_COST_SECOND, CAR_KEY_FUEL_TYPE, CAR_KEY_PERIOD_CALC},
+        Cursor cursor = db.query(TABLE_CARS, new String[]{KEY_ID, CAR_KEY_MARK, CAR_KEY_MODEL, CAR_KEY_FUEL_CONSUMPTION_FIRST, CAR_KEY_COST_FIRST,
+                        CAR_KEY_FUEL_CONSUMPTION_SECOND, CAR_KEY_COST_SECOND, CAR_KEY_FUEL_TYPE, CAR_KEY_PERIOD_CALC},
                 KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
 
         if(cursor != null){
@@ -144,8 +145,8 @@ public class Database extends SQLiteOpenHelper {
                 car.setModel(cursor.getString(2));
                 car.setAverageConsumptionFirstFuel(Double.parseDouble(cursor.getString(3)));
                 car.setAverageCostFirstFuel(Double.parseDouble(cursor.getString(4)));
-                car.setAverageConsumptionFirstFuel(Double.parseDouble(cursor.getString(5)));
-                car.setAverageCostFirstFuel(Double.parseDouble(cursor.getString(6)));
+                car.setAverageConsumptionSecondFuel(Double.parseDouble(cursor.getString(5)));
+                car.setAverageCostSecondFuel(Double.parseDouble(cursor.getString(6)));
                 car.setFuelType(cursor.getString(7));
                 car.setPeriodTimeForCalculation(cursor.getString(8));
 
@@ -219,9 +220,8 @@ public class Database extends SQLiteOpenHelper {
      * Method saves fuel in database.
      * Metoda zapisuje tankowanie w bazie danych.
      * @param fuel fuel for add to database
-     * @param carID car id for fuel is add
      */
-    public void addFuel(Fuel fuel, String carID){
+    public void addFuel(Fuel fuel){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -230,7 +230,7 @@ public class Database extends SQLiteOpenHelper {
         contentValues.put(FUEL_KEY_COST, fuel.getCost());
         contentValues.put(FUEL_KEY_QUANTITY, fuel.getQuantity());
         contentValues.put(FUEL_KEY_MILEAGE, fuel.getMileage());
-        contentValues.put(FUEL_KEY_CAR_ID, carID);
+        contentValues.put(FUEL_KEY_CAR_ID, fuel.getCarId());
 
         db.insert(TABLE_FUELS, null, contentValues);
     }
@@ -247,7 +247,8 @@ public class Database extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         try{
-            Cursor cursor = db.query(TABLE_FUELS, new String[]{KEY_ID, FUEL_KEY_FUEL_TYPE, FUEL_KEY_DATE, FUEL_KEY_COST, FUEL_KEY_QUANTITY, FUEL_KEY_MILEAGE}, FUEL_KEY_CAR_ID + "=?",
+            Cursor cursor = db.query(TABLE_FUELS, new String[]{KEY_ID, FUEL_KEY_FUEL_TYPE, FUEL_KEY_DATE, FUEL_KEY_COST, FUEL_KEY_QUANTITY,
+                            FUEL_KEY_MILEAGE, FUEL_KEY_CAR_ID}, FUEL_KEY_CAR_ID + "=?",
                     new String[]{carId}, null, null, null, null);
 
             if(cursor.moveToFirst()){
@@ -403,10 +404,10 @@ public class Database extends SQLiteOpenHelper {
         if(cursor != null){
             cursor.moveToFirst();
         }
-
         Fuel fuel = new Fuel(Integer.parseInt(cursor.getString(0)), cursor.getString(1),
                 cursor.getString(2), Double.parseDouble(cursor.getString(3)),
-                Double.parseDouble(cursor.getString(4)), Integer.parseInt(cursor.getString(5)));
+                Double.parseDouble(cursor.getString(4)), Integer.parseInt(cursor.getString(5)),
+                Integer.parseInt(cursor.getString(6)));
         return fuel;
     }
 
@@ -428,6 +429,7 @@ public class Database extends SQLiteOpenHelper {
                     fuel.setCost(Double.parseDouble(cursor.getString(3)));
                     fuel.setQuantity(Double.parseDouble(cursor.getString(4)));
                     fuel.setMileage(Integer.parseInt(cursor.getString(5)));
+                    fuel.setCarId(Integer.parseInt(cursor.getString(6)));
 
                     result.add(fuel);
 

@@ -160,4 +160,10 @@ public class Car {
             return Integer.parseInt(getPeriodTimeForCalculation().substring(0,2).trim());
         }
     }
+
+    public String toStringForCsvFile(){
+        return "car," + this.getId()+ "," + this.getMark() + "," + this.getModel()+ "," + this.getAverageConsumptionFirstFuel()+ ","
+                + this.getAverageConsumptionSecondFuel()+ "," + this.getAverageCostFirstFuel()+ "," + this.getAverageCostSecondFuel()
+                + "," + this.getFuelType()+ "," + this.getPeriodTimeForCalculation() + "\n";
+    }
 }

@@ -9,7 +9,7 @@ import java.util.Locale;
 public class Fuel {
 
     /**
-     * id car
+     * id fuel
      */
     private int id;
     /**
@@ -32,26 +32,32 @@ public class Fuel {
      * milleage car in refueled fuel
      */
     private int mileage;
+    /**
+     * id car for fuel
+     */
+    private int carId;
 
     public Fuel(){
 
     }
 
-    public Fuel(int id, String date, String fuelType, double cost, double quantity, int mileage) {
+    public Fuel(int id, String date, String fuelType, double cost, double quantity, int mileage, int carId) {
         this.id = id;
         this.date = date;
         this.fuelType = fuelType;
         this.cost = cost;
         this.quantity = quantity;
         this.mileage = mileage;
+        this.carId = carId;
     }
 
-    public Fuel(String date, String fuelType, double cost, double quantity, int mileage) {
+    public Fuel(String date, String fuelType, double cost, double quantity, int mileage, int carId) {
         this.date = date;
         this.fuelType = fuelType;
         this.cost = cost;
         this.quantity = quantity;
         this.mileage = mileage;
+        this.carId = carId;
     }
 
     public int getId() {
@@ -102,6 +108,18 @@ public class Fuel {
         this.mileage = mileage;
     }
 
+    public int getCarId() {
+        return carId;
+    }
+
+    public void setCarId(int carId) {
+        this.carId = carId;
+    }
+
+    public String toStringForCsvFile() {
+        return "fuel," + this.getId()+ "," + this.getDate() + "," + this.getFuelType()+ "," + this.getCost()+ ","
+                + this.getMileage( ) + "," + this.getQuantity() + "," + this.getCarId() + "\n";
+    }
 
     public static class Comparators {
 

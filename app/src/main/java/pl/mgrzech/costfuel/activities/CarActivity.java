@@ -148,7 +148,7 @@ public class CarActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-             database = new Database(CarActivity.this);
+             database = DatabaseSingleton.getInstance(CarActivity.this);
              database.deleteFuelsForCar(car.getId());
 
              if(database.deleteCar(car) > 0){

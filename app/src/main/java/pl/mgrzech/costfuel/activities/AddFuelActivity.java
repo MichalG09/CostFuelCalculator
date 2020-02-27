@@ -271,10 +271,10 @@ public class AddFuelActivity extends AppCompatActivity {
 
         if(errorMessage.isEmpty()){
 
-            Fuel newFuel = new Fuel(dateFuelAddingFuel, typeFuelAddingFuel, costAddingFuel, quantityAddingFuel, mileageAddingFuel);
+            Fuel newFuel = new Fuel(dateFuelAddingFuel, typeFuelAddingFuel, costAddingFuel, quantityAddingFuel, mileageAddingFuel, carIdForFuel);
 
             if(checkCorrectMileageFuel(newFuel, database)){
-                database.addFuel(newFuel, String.valueOf(carIdForFuel));
+                database.addFuel(newFuel);
                 clearView();
                 car = database.getCarById(carIdForFuel);
                 car = calculateAvarageFuelAndCost.recalculate(database, car);

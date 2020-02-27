@@ -14,6 +14,7 @@ import android.view.View;
 
 import java.util.List;
 
+import pl.mgrzech.costfuel.Facades.CsvFileFacade;
 import pl.mgrzech.costfuel.R;
 import pl.mgrzech.costfuel.adapters.ListAllCarAdapter;
 import pl.mgrzech.costfuel.database.Database;
@@ -25,6 +26,7 @@ import pl.mgrzech.costfuel.models.Car;
  */
 public class AllCarsActivity extends AppCompatActivity {
 
+    private CsvFileFacade csvFileFacade = new CsvFileFacade();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +61,22 @@ public class AllCarsActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-        if (id == R.id.menu_about) {
+        else if (id == R.id.menu_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
+            return true;
+        }
+        else if (id == R.id.menu_export) {
+            csvFileFacade.saveDataToCsvFile(this);
+            return true;
+        }
+        else if (id == R.id.menu_import) {
+            csvFileFacade.readDataFromCsvFile(this);
+
+//            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//            intent.addCategory(Intent.CATEGORY_OPENABLE);
+//            intent.setType("*/*");
+//            startActivityForResult(intent, 10);
             return true;
         }
 
@@ -74,7 +89,7 @@ public class AllCarsActivity extends AppCompatActivity {
      * @param view
      */
     public void onAddNewCar(View view) {
-        Intent intent = new Intent(this, AddCarActivity.class);
+        Intent intent = new Intent(this, AddCarActivityView.class);
         startActivity(intent);
     }
 

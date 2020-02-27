@@ -943,4 +943,8 @@
     <string name="fuel_row_button_delete_fuel">fuel_row_button_delete_fuel</string>
     <string name="activity_all_fuels_no_fuels_to_show">Brak tankowań</string>
     <string name="about_activit_version">ver.</string>
+    <string name="menu_export">Eksport danych</string>
+    <string name="menu_import">Import danych</string>
+    <string name="Text_Yes">TAK</string>
+    <string name="Text_No">NIE</string>
 </resources>

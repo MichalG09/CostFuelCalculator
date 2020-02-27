@@ -70,10 +70,10 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
      */
     @Test
     public void bCheckAveragesValuesAfterAddOneFuelEachTypeForCar(){
-        fuel = new Fuel("19.08.2019", "PB", 250.0, 50.0, 1000 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("20.08.2019", "LPG", 60.0, 30.0, 1000 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel("19.08.2019", "PB", 250.0, 50.0, 1000, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("20.08.2019", "LPG", 60.0, 30.0, 1000, testingCar.getId());
+        database.addFuel(fuel);
         testingCar = calculateAvarageFuelAndCost.recalculate(database, testingCar);
         database.updateCar(testingCar);
         assertTrue(testingCar.getAverageCostFirstFuel() == 0 && testingCar.getAverageCostFirstFuel() == 0
@@ -86,8 +86,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
      */
     @Test
     public void cCheckAveragesValuesAfterAddTwoFuelsForOneTypeForCar(){
-        fuel = new Fuel("21.08.2019", "PB", 250.0, 50.0, 1500 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel("21.08.2019", "PB", 250.0, 50.0, 1500, testingCar.getId());
+        database.addFuel(fuel);
         testingCar = calculateAvarageFuelAndCost.recalculate(database, testingCar);
         database.updateCar(testingCar);
         assertTrue(testingCar.getAverageConsumptionFirstFuel() == 10 && testingCar.getAverageCostFirstFuel() == 50
@@ -99,8 +99,8 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
      */
     @Test
     public void dCheckAveragesValuesAfterAddTwoFuelsEachTypeForCar(){
-        fuel = new Fuel("22.08.2019", "LPG", 60.0, 30.0, 1500 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel("22.08.2019", "LPG", 60.0, 30.0, 1500, testingCar.getId());
+        database.addFuel(fuel);
         testingCar = calculateAvarageFuelAndCost.recalculate(database, testingCar);
         database.updateCar(testingCar);
         assertTrue(testingCar.getAverageConsumptionFirstFuel() == 10 && testingCar.getAverageCostFirstFuel() == 50
@@ -140,14 +140,14 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
      */
     @Test
     public void gCheckAveragesValuesAfterAddThreeFuelsForCar(){
-        fuel = new Fuel("20.08.2019", "PB", 250.0, 50.0, 1500 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("22.08.2019", "PB", 275.0, 35.0, 1900 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("20.08.2019", "LPG", 60.0, 28.0, 1500 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("22.08.2019", "LPG", 85.0, 40.0, 1900 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel("20.08.2019", "PB", 250.0, 50.0, 1500, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("22.08.2019", "PB", 275.0, 35.0, 1900, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("20.08.2019", "LPG", 60.0, 28.0, 1500, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("22.08.2019", "LPG", 85.0, 40.0, 1900, testingCar.getId());
+        database.addFuel(fuel);
         testingCar = calculateAvarageFuelAndCost.recalculate(database, testingCar);
         database.updateCar(testingCar);
         assertTrue(decimalFormat.format(testingCar.getAverageCostFirstFuel()).equals("58.33")
@@ -163,14 +163,14 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
     @Test
     public void hCheckAverageValuesAfterAddIncorrectFuel(){
         database.deleteFuelsForCar(testingCar.getId());
-        fuel = new Fuel("24.08.2019", "PB", 275.0, 35.0, 1000 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("28.08.2019", "PB", 375.0, 45.0, 1500 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("24.08.2019", "LPG", 80, 35.0, 0 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("28.08.2019", "LPG", 90, 45.0, 0 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel("24.08.2019", "PB", 275.0, 35.0, 1000, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("28.08.2019", "PB", 375.0, 45.0, 1500, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("24.08.2019", "LPG", 80, 35.0, 0, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("28.08.2019", "LPG", 90, 45.0, 0, testingCar.getId());
+        database.addFuel(fuel);
         testingCar = calculateAvarageFuelAndCost.recalculate(database, testingCar);
         database.updateCar(testingCar);
         assertTrue(decimalFormat.format(testingCar.getAverageCostFirstFuel()).equals("75.00")
@@ -186,14 +186,14 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
     @Test
     public void iCheckAverageValuesAfterAddIncorrectFuel(){
         database.deleteFuelsForCar(testingCar.getId());
-        fuel = new Fuel("24.08.2019", "PB", 275.0, 35.0, 0 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("28.08.2019", "PB", 375.0, 45.0, 0 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("24.08.2019", "LPG", 80, 35.0, 0 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel("28.08.2019", "LPG", 90, 45.0, 0 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel("24.08.2019", "PB", 275.0, 35.0, 0, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("28.08.2019", "PB", 375.0, 45.0, 0, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("24.08.2019", "LPG", 80, 35.0, 0, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel("28.08.2019", "LPG", 90, 45.0, 0, testingCar.getId());
+        database.addFuel(fuel);
         testingCar = calculateAvarageFuelAndCost.recalculate(database, testingCar);
         database.updateCar(testingCar);
         assertTrue(testingCar.getAverageConsumptionFirstFuel() == -1 && testingCar.getAverageCostFirstFuel() == -1
@@ -209,22 +209,22 @@ public class CalculateAverageValuesForTwoFuelTypeTest {
         database.deleteFuelsForCar(testingCar.getId());
         testingCar.setPeriodTimeForCalculation("1 miesiąc");
         database.updateCar(testingCar);
-        fuel = new Fuel(getEarlierDate(now, 0, 0), "PB", 275.0, 35.0, 300 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel(getEarlierDate(now, 0, 1), "PB", 375.0, 45.0, 200 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel(getEarlierDate(now, 1, 2), "PB", 475.0, 55.0, 100 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel(getEarlierDate(now, 1, 2), "PB", 95.0, 15.0, 5 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel(getEarlierDate(now, 0, 0), "LPG", 80, 35.0, 1000 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel(getEarlierDate(now, 0, 1), "LPG", 90, 45.0, 900 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel(getEarlierDate(now, 1, 2), "LPG", 70, 55.0, 800 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
-        fuel = new Fuel(getEarlierDate(now, 3, 3), "LPG", 100, 15.0, 600 );
-        database.addFuel(fuel, String.valueOf(testingCar.getId()));
+        fuel = new Fuel(getEarlierDate(now, 0, 0), "PB", 275.0, 35.0, 300, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel(getEarlierDate(now, 0, 1), "PB", 375.0, 45.0, 200, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel(getEarlierDate(now, 1, 2), "PB", 475.0, 55.0, 100, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel(getEarlierDate(now, 1, 2), "PB", 95.0, 15.0, 5, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel(getEarlierDate(now, 0, 0), "LPG", 80, 35.0, 1000, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel(getEarlierDate(now, 0, 1), "LPG", 90, 45.0, 900, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel(getEarlierDate(now, 1, 2), "LPG", 70, 55.0, 800, testingCar.getId());
+        database.addFuel(fuel);
+        fuel = new Fuel(getEarlierDate(now, 3, 3), "LPG", 100, 15.0, 600, testingCar.getId());
+        database.addFuel(fuel);
         testingCar = calculateAvarageFuelAndCost.recalculate(database, testingCar);
         database.updateCar(testingCar);
         assertTrue(testingCar.getAverageConsumptionFirstFuel() == 35 && testingCar.getAverageCostFirstFuel() == 275
